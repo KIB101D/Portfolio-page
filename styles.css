@@ -138,9 +138,9 @@ main {
 
 .language-dropdown {
   position: relative;
+  z-index: 2000;
 }
-
-.dropdown-btn {
+.language-dropdown .dropdown-btn {
   background: transparent;
   border: none;
   color: #f5f7fa;
@@ -150,24 +150,23 @@ main {
   border-radius: 6px;
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.dropdown-btn:hover {
+.language-dropdown .dropdown-btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 @media (max-width: 767px) {
-  .dropdown-btn {
+  .language-dropdown .dropdown-btn {
     font-size: 0.8rem;
   }
 }
 @media (min-width: 320px) and (max-width: 385px) {
-  .dropdown-btn {
+  .language-dropdown .dropdown-btn {
     font-size: 0.8rem;
   }
 }
-
-.dropdown-content {
-  display: none;
+.language-dropdown .dropdown-content {
   position: absolute;
   top: 100%;
+  left: 0;
   background: rgba(0, 0, 0, 0.95);
   list-style: none;
   padding: 0.8rem 0;
@@ -176,11 +175,13 @@ main {
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: translateY(10px);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1), transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 2100;
 }
-.dropdown-content li {
+.language-dropdown .dropdown-content li {
   padding: 0.8rem 1.5rem;
   cursor: pointer;
   color: #f5f7fa;
@@ -188,23 +189,22 @@ main {
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 @media (max-width: 767px) {
-  .dropdown-content li {
+  .language-dropdown .dropdown-content li {
     font-size: 0.8rem;
   }
 }
 @media (min-width: 320px) and (max-width: 385px) {
-  .dropdown-content li {
+  .language-dropdown .dropdown-content li {
     font-size: 0.8rem;
   }
 }
-.dropdown-content li:hover {
+.language-dropdown .dropdown-content li:hover {
   background: rgba(255, 255, 255, 0.05);
   transform: translateX(5px);
 }
-
 .language-dropdown.active .dropdown-content {
-  display: block;
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -703,6 +703,11 @@ main {
 @media (max-width: 767px) {
   .about-section {
     padding: 6rem 1.5rem;
+  }
+}
+@media (min-width: 320px) and (max-width: 385px) {
+  .about-section {
+    padding: 0.5rem 1.5rem !important;
   }
 }
 
