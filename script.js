@@ -65,8 +65,6 @@ function changeLanguage(lang) {
     setTimeout(() => {
         initScrollAnimations();
     }, 100);
-
-    showLanguageNotification(lang);
 }
 
 // Функція для оновлення HTML вмісту
