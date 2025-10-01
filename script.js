@@ -274,7 +274,15 @@ function initLavaLamp() {
     createBlobs();
     updateBlobs();
 
-    window.addEventListener('resize', createBlobs);
+    function handleResize() {
+        if (window.innerWidth > 1200) {
+            createBlobs();
+        }
+    }
+
+    if (window.innerWidth > 1200) {
+        window.addEventListener('resize', handleResize);
+    }
 }
 
 // Управління хедером та кнопкою "Нагору"
