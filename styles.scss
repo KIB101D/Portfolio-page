@@ -183,8 +183,8 @@ main {
 
     // Ховаємо тільки основну частину хедера, але не меню
     &.hidden {
-        visibility: hidden;
         pointer-events: none;
+        opacity: 0;
 
         // Меню залишається видимим навіть при прихованому хедері
         .nav-menu {
@@ -597,7 +597,7 @@ main {
     position: relative;
     width: 100%;
     height: 100vh; // базовий варіант для всіх браузерів
-    min-height: 100dvh; // фікс (Chrome, Safari 16.4+)
+    min-height: 100dvh; // сучасний фікс (Chrome, Safari 16.4+)
     min-height: -webkit-fill-available; // fallback для старих Safari iOS
     background: $primary-bg;
     display: flex;
@@ -978,32 +978,6 @@ main {
     box-shadow:
         0 0 60px rgba(255, 94, 0, 0.6),
         0 0 100px rgba(255, 30, 0, 0.4);
-
-    //  Mobile
-    @include respond(mobile) {
-        // Вимикаємо важкі ефекти
-        mix-blend-mode: normal;
-        box-shadow: none;
-        // Спрощуємо blur (goo ефект дуже важкий для Safari/Chrome моб)
-        filter: blur(12px);
-    }
-
-    //  Small Mobile (ще легше)
-    @include respond(small_mobile) {
-        mix-blend-mode: normal;
-        box-shadow: none;
-        filter: blur(10px);
-        // робимо менш яскравим, щоб не грузило GPU
-        opacity: 0.8;
-    }
-
-    //  Tablet
-    @include respond(tablet) {
-        // Теж спрощуємо, як і на мобільних
-        mix-blend-mode: normal;
-        box-shadow: none;
-        filter: blur(12px);
-    }
 }
 
 /* Розміри та анімація для різних крапель */
