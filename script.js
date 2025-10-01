@@ -211,9 +211,10 @@ function initLavaLamp() {
     const container = document.querySelector('.lamp-container');
     const lamp = document.querySelector('.lava-lamp');
 
-    if (!container || !lamp) return;
-
-    const isMobile = window.innerWidth < 768;
+    if (!container || !lamp) {
+        console.log('Елементи лави не знайдені, пропускаємо ініціалізацію');
+        return;
+    }
 
     let blobs = [];
 
@@ -221,13 +222,11 @@ function initLavaLamp() {
         container.innerHTML = '';
         blobs = [];
 
-        const blobCount = isMobile ? 3 : 5; // менше крапель на мобільних
-
-        for (let i = 0; i < blobCount; i++) {
+        for (let i = 0; i < 5; i++) {
             const blob = document.createElement('div');
             blob.className = 'blob';
 
-            const size = isMobile ? 40 + Math.random() * 30 : 50 + Math.random() * 70;
+            const size = 50 + Math.random() * 70;
             const left = 10 + Math.random() * 80;
             const bottom = Math.random() * 20;
 
@@ -239,11 +238,11 @@ function initLavaLamp() {
             container.appendChild(blob);
             blobs.push({
                 element: blob,
-                speed: isMobile ? 0.3 + Math.random() * 0.7 : 0.5 + Math.random() * 1.5,
+                speed: 0.5 + Math.random() * 1.5,
                 xDirection: Math.random() > 0.5 ? 1 : -1,
                 yDirection: Math.random() > 0.5 ? 1 : -1,
-                xAmplitude: isMobile ? 0.5 + Math.random() : 0.5 + Math.random() * 2,
-                yAmplitude: isMobile ? 0.5 + Math.random() * 1.5 : 1 + Math.random() * 3
+                xAmplitude: 0.5 + Math.random() * 2,
+                yAmplitude: 1 + Math.random() * 3
             });
         }
     }
@@ -260,6 +259,25 @@ function initLavaLamp() {
 
         requestAnimationFrame(updateBlobs);
     }
+
+    lamp.addEventListener('mousemove', (e) => {
+        const rect = lamp.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        blobs.forEach((blob, index) => {
+            const sensitivity = 0.3 + (index * 0.1);
+            const offsetX = x * 15 * sensitivity;
+            const offsetY = y * 15 * sensitivity;
+
+            const currentTransform = blob.element.style.transform;
+            blob.element.style.transform = `${currentTransform} translate(${offsetX}px, ${offsetY}px)`;
+        });
+    });
+
+    lamp.addEventListener('mouseleave', () => {
+        // Не потрібно скидати, оскільки анімація продовжується
+    });
 
     createBlobs();
     updateBlobs();
