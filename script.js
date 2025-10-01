@@ -10,6 +10,7 @@ const dropBtn = document.querySelector('.dropdown-btn');
 const dropContent = document.querySelector('.dropdown-content');
 
 if (dropdown && dropBtn && dropContent) {
+    // Відкриття / закриття dropdown
     dropBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdown.classList.toggle('active');
@@ -21,12 +22,20 @@ if (dropdown && dropBtn && dropContent) {
             const selectedLang = lang.dataset.lang;
             dropBtn.textContent = (selectedLang === 'ua' ? 'UA' : 'EN') + ' ▾';
             changeLanguage(selectedLang);
-            dropdown.classList.remove('active');
+            dropdown.classList.remove('active'); // закриваємо після вибору
         });
     });
 
     // Закриття dropdown при кліку поза ним
     document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Додатково: закриття при скролі або тапі на overlay (мобільні)
+    window.addEventListener('scroll', () => dropdown.classList.remove('active'), { passive: true });
+    document.addEventListener('touchstart', (e) => {
         if (!dropdown.contains(e.target)) {
             dropdown.classList.remove('active');
         }
