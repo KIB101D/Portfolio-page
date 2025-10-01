@@ -811,6 +811,12 @@ main {
   mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
 }
+@media (max-width: 767px) {
+  .lava-lamp .lava-lamp {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  }
+}
 @media (min-width: 768px) and (max-width: 1199px) {
   .lava-lamp {
     height: 100%;
@@ -844,6 +850,19 @@ main {
   transition: transform 0.5s ease-out, filter 0.5s ease-out;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 60px rgba(255, 94, 0, 0.6), 0 0 100px rgba(255, 30, 0, 0.4);
+}
+@media (max-width: 767px) {
+  .blob .blob {
+    animation: mobile-blob 6s ease-in-out infinite;
+  }
+  @keyframes mobile-blob {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-100px) scale(1.1);
+    }
+  }
 }
 
 /* Розміри та анімація для різних крапель */
