@@ -798,6 +798,8 @@ main {
 @media (min-width: 768px) and (max-width: 1199px) {
   .lava-lamp-container {
     height: 100%;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
   }
 }
 
