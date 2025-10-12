@@ -703,8 +703,7 @@ main {
 }
 
 .about-section {
-  height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
   min-height: -webkit-fill-available;
   background: #0a0a0a;
   position: relative;
