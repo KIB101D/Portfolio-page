@@ -6,7 +6,7 @@ $primary-bg: #0a0a0a;
 $secondary-bg: #111;
 $text-color: #f5f7fa;
 $accent-color: #ffffff;
-$title-color: #FF6B35;
+$title-color: #ff6b35;
 $border-color: rgba(255, 255, 255, 0.1);
 // Змінні для курсора
 $cursor-size: 24px;
@@ -15,10 +15,11 @@ $cursor-color: #ff6b6b;
 $cursor-glow-color: #ff8c00;
 $cursor-hover-color: #ff8e8e;
 $cursor-click-color: #ff5252;
-$cursor-transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.3s ease;
+$cursor-transition:
+  transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+  border-color 0.2s ease,
+  background-color 0.2s ease,
+  box-shadow 0.3s ease;
 
 // Міксіни
 
@@ -27,230 +28,218 @@ $tablet: 768px;
 $desktop: 1200px;
 
 @mixin respond($break) {
-    @if $break ==small_mobile {
-        @media (min-width: #{$small}) and (max-width: 385px) {
-            @content;
-        }
-
-        // від 320px до 385px (малі телефони)
+  @if $break ==small_mobile {
+    @media (min-width: #{$small}) and (max-width: 385px) {
+      @content;
     }
 
-    @else if $break ==tablet {
-        @media (min-width: #{$tablet}) and (max-width: #{$desktop - 1}) {
-            @content;
-        }
-
-        // від 768px до 1199px
+    // від 320px до 385px (малі телефони)
+  } @else if $break ==tablet {
+    @media (min-width: #{$tablet}) and (max-width: #{$desktop - 1}) {
+      @content;
     }
 
-    @else if $break ==mobile {
-        @media (max-width: #{$tablet - 1}) {
-            @content;
-        }
-
-        // до 767px (всі мобільні пристрої)
+    // від 768px до 1199px
+  } @else if $break ==mobile {
+    @media (max-width: #{$tablet - 1}) {
+      @content;
     }
 
-    @else if $break ==mobile-sm {
-        @media (max-width: 385px) {
-            @content;
-        }
-
-        // до 385px (малі мобільні)
+    // до 767px (всі мобільні пристрої)
+  } @else if $break ==mobile-sm {
+    @media (max-width: 385px) {
+      @content;
     }
 
-    @else if $break ==desktop {
-        @media (min-width: #{$desktop}) {
-            @content;
-        }
-
-        // від 1200px
+    // до 385px (малі мобільні)
+  } @else if $break ==desktop {
+    @media (min-width: #{$desktop}) {
+      @content;
     }
 
-    @else {
-        @error "Unknown breakpoint: #{$break}. Use 'small', 'mobile-sm', 'mobile', 'tablet', or 'desktop'.";
-    }
+    // від 1200px
+  } @else {
+    @error "Unknown breakpoint: #{$break}. Use 'small', 'mobile-sm', 'mobile', 'tablet', or 'desktop'.";
+  }
 }
 
 @mixin fade-in-up($delay: 0s) {
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeInUp 1.2s $ease-out-expo forwards;
-    animation-delay: $delay;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeInUp 1.2s $ease-out-expo forwards;
+  animation-delay: $delay;
 }
 
 @mixin fade-in-left($delay: 0s) {
-    opacity: 0;
-    transform: translateX(-50px);
-    animation: fadeInLeft 1.4s $ease-out-expo forwards;
-    animation-delay: $delay;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: fadeInLeft 1.4s $ease-out-expo forwards;
+  animation-delay: $delay;
 }
 
 @mixin fade-in-right($delay: 0s) {
-    opacity: 0;
-    transform: translateX(50px);
-    animation: fadeInRight 1.4s $ease-out-expo forwards;
-    animation-delay: $delay;
+  opacity: 0;
+  transform: translateX(50px);
+  animation: fadeInRight 1.4s $ease-out-expo forwards;
+  animation-delay: $delay;
 }
 
 // Базові стилі
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    scroll-behavior: smooth;
-    background-color: $primary-bg;
-    font-family: 'Manrope', sans-serif;
-    color: $text-color;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  scroll-behavior: smooth;
+  background-color: $primary-bg;
+  font-family: "Manrope", sans-serif;
+  color: $text-color;
 
-    &.menu-open {
-        overflow: hidden !important;
-    }
+  &.menu-open {
+    overflow: hidden !important;
+  }
 }
 
 main {
-    margin-top: 0;
-    transition: margin-top 0.6s $ease-out-expo;
+  margin-top: 0;
+  transition: margin-top 0.6s $ease-out-expo;
 
-    .header.hidden+& {
-        margin-top: -80px;
-    }
+  .header.hidden + & {
+    margin-top: -80px;
+  }
 }
 
 .container {
-    width: 100%;
-    overflow-x: hidden;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 // Анімації
 @keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(50px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes fadeInRight {
-    0% {
-        opacity: 0;
-        transform: translateX(50px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 // Header стилі
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 2rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: transparent;
-    z-index: 1000;
-    transition: all 0.6s $ease-out-expo;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  z-index: 1000;
+  transition: all 0.6s $ease-out-expo;
 
-    // Ховаємо тільки основну частину хедера, але не меню
-    &.hidden {
-        pointer-events: none;
-        opacity: 0;
+  // Ховаємо тільки основну частину хедера, але не меню
+  &.hidden {
+    pointer-events: none;
+    opacity: 0;
 
-        // Меню залишається видимим навіть при прихованому хедері
-        .nav-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
+    // Меню залишається видимим навіть при прихованому хедері
+    .nav-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
+  }
 
-    // Показуємо хедер при скролі вгору
+  // Показуємо хедер при скролі вгору
+  &.visible {
+    transform: translateY(0);
+    opacity: 1;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.5rem 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  @include respond(mobile) {
+    padding: 1.5rem;
+
     &.visible {
-        transform: translateY(0);
-        opacity: 1;
-        background: rgba(10, 10, 10, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 1.5rem 3rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      padding: 1rem 1.5rem;
     }
-
-    @include respond(mobile) {
-        padding: 1.5rem;
-
-        &.visible {
-            padding: 1rem 1.5rem;
-        }
-    }
+  }
 }
 
-
 .header-logo {
-    width: 39px;
-    height: 39px;
-    transition: all 0.4s $ease-out-expo;
+  width: 39px;
+  height: 39px;
+  transition: all 0.4s $ease-out-expo;
 
-    &:hover {
-        transform: translateX(5px);
-    }
+  &:hover {
+    transform: translateX(5px);
+  }
 
-    @include respond(mobile) {
-        width: 30px;
-        height: 30px;
-    }
+  @include respond(mobile) {
+    width: 30px;
+    height: 30px;
+  }
 
-    @include respond(small_mobile) {
-        width: 30px;
-        height: 30px;
-    }
+  @include respond(small_mobile) {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 
-    @include respond(mobile) {
-        gap: 1.5rem;
-    }
+  @include respond(mobile) {
+    gap: 1.5rem;
+  }
 }
 
-// Dropdown мов
 .language-dropdown {
-    position: relative;
-}
+  position: relative;
+  display: inline-block;
 
-.dropdown-btn {
+  .dropdown-btn {
     background: transparent;
     border: none;
     color: $text-color;
@@ -261,1814 +250,2648 @@ main {
     transition: all 0.3s $ease-out-expo;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.1);
     }
 
     @include respond(mobile) {
-        font-size: 0.8rem;
+      font-size: 0.8rem;
     }
+  }
 
-    @include respond(small_mobile) {
-        font-size: 0.8rem;
-    }
-}
+  .dropdown-content {
+    // Замість display: none
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; // Щоб не клікалося, поки сховане
 
-.dropdown-content {
-    display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px); // Трохи відступимо
+    right: 0;
     background: rgba(0, 0, 0, 0.95);
     list-style: none;
-    padding: 0.8rem 0;
+    padding: 0.5rem 0;
     border-radius: 8px;
-    min-width: 120px;
+    min-width: 100px;
     backdrop-filter: blur(10px);
     border: 1px solid $border-color;
+
+    // Анімація появи
     transform: translateY(10px);
-    opacity: 0;
-    transition: all 0.3s $ease-out-expo;
+    transition:
+      opacity 0.3s $ease-out-expo,
+      transform 0.3s $ease-out-expo,
+      visibility 0.3s;
 
     li {
-        padding: 0.8rem 1.5rem;
-        cursor: pointer;
-        color: $text-color;
-        font-size: 1rem;
-        transition: all 0.3s $ease-out-expo;
+      padding: 0.7rem 1.2rem;
+      cursor: pointer;
+      color: $text-color;
+      font-size: 1rem;
+      transition: all 0.3s $ease-out-expo;
 
-        @include respond(mobile) {
-            font-size: 0.8rem;
-        }
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateX(5px);
+        color: #ff6b35; // Твій акцентний колір
+      }
 
-        @include respond(small_mobile) {
-            font-size: 0.8rem;
-        }
-
-        &:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateX(5px);
-        }
+      @include respond(mobile) {
+        font-size: 0.8rem;
+      }
     }
-}
+  }
 
-.language-dropdown.active .dropdown-content {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+  // Стан, коли додано клас .active через JS
+  &.active {
+    .dropdown-content {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-btn {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
 }
 
 // Бургер меню
 .burger-menu {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    background: none;
-    cursor: pointer;
-    z-index: 1100;
-    position: relative;
-    padding: 0;
-    transition: all 0.4s $ease-out-expo;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 1100;
+  position: relative;
+  padding: 0;
+  transition: all 0.4s $ease-out-expo;
 
-    @include respond(mobile) {
-        width: 35px;
-        height: 35px;
-    }
+  @include respond(mobile) {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 .burger-menu-fixed {
-    position: fixed !important;
-    top: 2rem !important;
-    right: 3rem !important;
-    z-index: 1100 !important;
-    pointer-events: auto !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+  position: fixed !important;
+  top: 2rem !important;
+  right: 3rem !important;
+  z-index: 1100 !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 
-    @include respond(mobile) {
-        width: 35px;
-        height: 35px;
-        top: 1.5rem !important;
-        right: 1.5rem !important;
-    }
+  @include respond(mobile) {
+    width: 35px;
+    height: 35px;
+    top: 1.5rem !important;
+    right: 1.5rem !important;
+  }
 }
 
 // Ховаємо оригінальний бургер всередині хедера, коли він прихований
 .header.hidden .burger-menu:not(.burger-menu-fixed) {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-
 .burger-line {
-    height: 2px;
-    width: 30px;
-    background: $text-color;
-    border-radius: 1px;
-    transition: all 0.6s $ease-out-expo;
-    position: absolute;
-    left: 5px;
+  height: 2px;
+  width: 30px;
+  background: $text-color;
+  border-radius: 1px;
+  transition: all 0.6s $ease-out-expo;
+  position: absolute;
+  left: 5px;
 
-    @include respond(mobile) {
-        width: 25px;
-    }
+  @include respond(mobile) {
+    width: 25px;
+  }
 }
 
 .burger-line:nth-child(1) {
-    top: 14px;
+  top: 14px;
 
-    @include respond(mobile) {
-        top: 12px;
-    }
+  @include respond(mobile) {
+    top: 12px;
+  }
 }
 
 .burger-line:nth-child(2) {
-    top: 19px;
+  top: 19px;
 
-    @include respond(mobile) {
-        top: 17px;
-    }
+  @include respond(mobile) {
+    top: 17px;
+  }
 }
 
 .burger-line:nth-child(3) {
-    top: 24px;
+  top: 24px;
 
-    @include respond(mobile) {
-        top: 22px;
-    }
+  @include respond(mobile) {
+    top: 22px;
+  }
 }
 
 .burger-menu.active {
-    .burger-line:nth-child(1) {
-        top: 19px;
-        transform: rotate(45deg);
-        transition-delay: 0.2s;
+  .burger-line:nth-child(1) {
+    top: 19px;
+    transform: rotate(45deg);
+    transition-delay: 0.2s;
 
-        @include respond(mobile) {
-            top: 17px;
-        }
+    @include respond(mobile) {
+      top: 17px;
     }
+  }
 
-    .burger-line:nth-child(2) {
-        opacity: 0;
-        transform: translateX(-20px);
-        transition: all 0.3s $ease-out-expo;
+  .burger-line:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s $ease-out-expo;
+  }
+
+  .burger-line:nth-child(3) {
+    top: 19px;
+    transform: rotate(-45deg);
+    transition-delay: 0.2s;
+
+    @include respond(mobile) {
+      top: 17px;
     }
+  }
 
-    .burger-line:nth-child(3) {
-        top: 19px;
-        transform: rotate(-45deg);
-        transition-delay: 0.2s;
-
-        @include respond(mobile) {
-            top: 17px;
-        }
-    }
-
-    &:hover {
-        transform: rotate(90deg);
-    }
+  &:hover {
+    transform: rotate(90deg);
+  }
 }
 
 .burger-menu:hover {
-    .burger-line {
-        background: $accent-color;
-    }
+  .burger-line {
+    background: $accent-color;
+  }
 
-    .burger-line:nth-child(1) {
-        transform: translateY(-2px);
-    }
+  .burger-line:nth-child(1) {
+    transform: translateY(-2px);
+  }
 
-    .burger-line:nth-child(3) {
-        transform: translateY(2px);
-    }
+  .burger-line:nth-child(3) {
+    transform: translateY(2px);
+  }
 }
 
 // Overlay
 .menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: calc(100vh + env(safe-area-inset-bottom));
-    background: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.8s $ease-out-expo;
-    z-index: 1049;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh + env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.8s $ease-out-expo;
+  z-index: 1049;
 
-    &.active {
-        visibility: visible;
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(10px);
-    }
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+  }
 }
 
 // Навігаційне меню
 .nav-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.8s $ease-out-expo;
-    z-index: 1050;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.8s $ease-out-expo;
+  z-index: 1050;
 
-    // Меню завжди поверх всього
-    &.active {
-        opacity: 1;
-        visibility: visible;
-
-        .menu-item {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .menu-item:nth-child(1) {
-            transition-delay: 0.3s;
-        }
-
-        .menu-item:nth-child(2) {
-            transition-delay: 0.4s;
-        }
-
-        .menu-item:nth-child(3) {
-            transition-delay: 0.5s;
-        }
-
-        .menu-item:nth-child(4) {
-            transition-delay: 0.6s;
-        }
-    }
-}
-
-.menu-list {
-    list-style: none;
-    text-align: center;
-    padding: 0;
-}
-
-.menu-item {
-    margin: 3rem 0;
-    opacity: 0;
-    transform: translateY(50px) scale(0.9);
-    transition: all 0.8s $ease-out-expo;
-
-    @include respond(mobile) {
-        margin: 2rem 0;
-    }
-}
-
-.menu-link {
-    font-size: 3.5rem;
-    color: $text-color;
-    text-decoration: none;
-    font-weight: 300;
-    transition: all 0.6s $ease-out-expo;
-    padding: 1rem 3rem;
-    display: block;
-    position: relative;
-    letter-spacing: 2px;
-
-    @include respond(mobile) {
-        font-size: 2.5rem;
-        padding: 0.8rem 2rem;
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 0;
-        height: 1px;
-        background: $accent-color;
-        transition: width 0.8s $ease-out-expo;
-    }
-
-    &:hover {
-        color: $accent-color;
-        transform: translateX(20px);
-
-        &::before {
-            width: 100%;
-        }
-    }
-}
-
-.nav-menu.active {
+  // Меню завжди поверх всього
+  &.active {
     opacity: 1;
     visibility: visible;
 
     .menu-item {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
 
     .menu-item:nth-child(1) {
-        transition-delay: 0.3s;
+      transition-delay: 0.3s;
     }
 
     .menu-item:nth-child(2) {
-        transition-delay: 0.4s;
+      transition-delay: 0.4s;
     }
 
     .menu-item:nth-child(3) {
-        transition-delay: 0.5s;
+      transition-delay: 0.5s;
     }
 
     .menu-item:nth-child(4) {
-        transition-delay: 0.6s;
+      transition-delay: 0.6s;
     }
+  }
+}
+
+.menu-list {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+}
+
+.menu-item {
+  margin: 3rem 0;
+  opacity: 0;
+  transform: translateY(50px) scale(0.9);
+  transition: all 0.8s $ease-out-expo;
+
+  @include respond(mobile) {
+    margin: 2rem 0;
+  }
+}
+
+.menu-link {
+  font-size: 3.5rem;
+  color: $text-color;
+  text-decoration: none;
+  font-weight: 300;
+  transition: all 0.6s $ease-out-expo;
+  padding: 1rem 3rem;
+  display: block;
+  position: relative;
+  letter-spacing: 2px;
+
+  @include respond(mobile) {
+    font-size: 2.5rem;
+    padding: 0.8rem 2rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: $accent-color;
+    transition: width 0.8s $ease-out-expo;
+  }
+
+  &:hover {
+    color: $accent-color;
+    transform: translateX(20px);
+
+    &::before {
+      width: 100%;
+    }
+  }
+}
+
+.nav-menu.active {
+  opacity: 1;
+  visibility: visible;
+
+  .menu-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .menu-item:nth-child(1) {
+    transition-delay: 0.3s;
+  }
+
+  .menu-item:nth-child(2) {
+    transition-delay: 0.4s;
+  }
+
+  .menu-item:nth-child(3) {
+    transition-delay: 0.5s;
+  }
+
+  .menu-item:nth-child(4) {
+    transition-delay: 0.6s;
+  }
 }
 
 // Hero секція
 .hero {
-    position: relative;
-    width: 100%;
-    height: 100vh; // базовий варіант для всіх браузерів
-    min-height: 100dvh; // сучасний фікс (Chrome, Safari 16.4+)
-    min-height: -webkit-fill-available; // fallback для старих Safari iOS
-    background: $primary-bg;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; // Обрізає все, що виходить за межі hero
-    margin-top: 0;
+  position: relative;
+  width: 100%;
+  height: 100vh; // базовий варіант для всіх браузерів
+  min-height: 100dvh; // сучасний фікс (Chrome, Safari 16.4+)
+  min-height: -webkit-fill-available; // fallback для старих Safari iOS
+  background: $primary-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; // Обрізає все, що виходить за межі hero
+  margin-top: 0;
 
-    // ДОДАЄМО hero-animation ВСЕРЕДИНУ hero
-    .hero-animation {
-        position: absolute;
-        top: 0;
+  // ДОДАЄМО hero-animation ВСЕРЕДИНУ hero
+  .hero-animation {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw; // Використовуємо viewport width
+    height: 300px;
+    z-index: 2;
+    overflow: visible;
+    pointer-events: none;
+
+    .planet {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2200px;
+      background: url("images/Earth.avif") no-repeat center;
+      background-size: cover;
+      bottom: 0;
+      height: 1000px;
+      background-position: center bottom;
+
+      @include respond(mobile) {
         left: 50%;
-        transform: translateX(-50%);
-        width: 100vw; // Використовуємо viewport width
-        height: 300px;
-        z-index: 2;
-        overflow: visible;
-        pointer-events: none;
-
-        .planet {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2200px;
-            background: url('images/Earth.avif') no-repeat center;
-            background-size: cover;
-            bottom: 0;
-            height: 1000px;
-            background-position: center bottom;
-
-            @include respond(mobile) {
-                left: 50%;
-                transform: translateX(-50%) translateY(0);
-                width: 1000px;
-                height: 500px;
-            }
-        }
-
-        .ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-
-            &.large-ring {
-                width: 1800px;
-                height: 1800px;
-                background-image: url('images/Big.avif');
-                margin-left: -900px;
-                margin-top: -1225px;
-
-                @include respond(mobile) {
-                    width: 750px;
-                    height: 750px;
-                    margin-left: -375px;
-                    margin-top: -500px;
-                }
-            }
-
-            &.small-ring {
-                width: 2800px;
-                height: 2800px;
-                background-image: url('images/Small.avif');
-                margin-left: -1400px;
-                margin-top: -1750px;
-
-                @include respond(mobile) {
-                    width: 900px;
-                    height: 900px;
-                    margin-left: -450px;
-                    margin-top: -450px;
-                }
-            }
-        }
+        transform: translateX(-50%) translateY(0);
+        width: 1000px;
+        height: 500px;
+      }
     }
 
-    .hero-content {
-        z-index: 4;
-        position: relative;
-        text-align: center;
+    .ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+
+      &.large-ring {
+        width: 1800px;
+        height: 1800px;
+        background-image: url("images/Big.avif");
+        margin-left: -900px;
+        margin-top: -1225px;
+
+        @include respond(mobile) {
+          width: 750px;
+          height: 750px;
+          margin-left: -375px;
+          margin-top: -500px;
+        }
+      }
+
+      &.small-ring {
+        width: 2800px;
+        height: 2800px;
+        background-image: url("images/Small.avif");
+        margin-left: -1400px;
+        margin-top: -1750px;
+
+        @include respond(mobile) {
+          width: 900px;
+          height: 900px;
+          margin-left: -450px;
+          margin-top: -450px;
+        }
+      }
     }
+  }
+
+  .hero-content {
+    z-index: 4;
+    position: relative;
+    text-align: center;
+  }
 }
 
 // Мобільні стилі
 @include respond(mobile) {
-    .hero-animation {
-        width: 100vw;
+  .hero-animation {
+    width: 100vw;
 
-        // Гарантоване центрування
-        left: 50%;
-        transform: translateX(-50%);
-    }
+    // Гарантоване центрування
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 // Решта стилів залишаються незмінними
 .hero-title {
-    font-weight: 600;
-    font-size: 7rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 3px;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: $text-color;
-    @include fade-in-up();
+  font-weight: 600;
+  font-size: 7rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: $text-color;
+  @include fade-in-up();
 
-    @include respond(mobile) {
-        font-size: 2.3rem;
-        letter-spacing: 2.5px;
-        font-weight: 500;
-    }
+  @include respond(mobile) {
+    font-size: 2.3rem;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+  }
 
-    @include respond(small_mobile) {
-        font-size: 1.8rem;
-        letter-spacing: 2.5px;
-    }
+  @include respond(small_mobile) {
+    font-size: 1.8rem;
+    letter-spacing: 2.5px;
+  }
 }
 
 .hero-subtitle {
-    font-weight: 450;
-    font-size: 3.5rem;
+  font-weight: 450;
+  font-size: 3.5rem;
+  margin-bottom: 3rem;
+  margin-top: 0.4rem;
+  opacity: 0.8;
+  letter-spacing: 1px;
+  color: $text-color;
+  -webkit-background-clip: text;
+  background-clip: text;
+  @include fade-in-up(0.2s);
+
+  @include respond(mobile) {
+    font-size: 1.4rem;
     margin-bottom: 3rem;
-    margin-top: 0.4rem;
-    opacity: 0.8;
-    letter-spacing: 1px;
-    color: $text-color;
-    -webkit-background-clip: text;
-    background-clip: text;
-    @include fade-in-up(0.2s);
+    margin-top: 0.2rem;
+  }
 
-    @include respond(mobile) {
-        font-size: 1.4rem;
-        margin-bottom: 3rem;
-        margin-top: 0.2rem;
-    }
-
-    @include respond(small_mobile) {
-        margin-bottom: 3rem;
-        font-size: 1.2rem;
-    }
+  @include respond(small_mobile) {
+    margin-bottom: 3rem;
+    font-size: 1.2rem;
+  }
 }
 
 .hero-cta {
-    display: inline-block;
-    padding: 1.2rem 3rem;
-    background: transparent;
-    color: $text-color;
-    font-weight: 400;
-    font-size: 1.1rem;
-    border: 1px solid $text-color;
-    border-radius: 0;
-    text-decoration: none;
-    transition: all 0.6s $ease-out-expo;
-    @include fade-in-up(0.4s);
-    letter-spacing: 2px;
-    position: relative;
-    overflow: hidden;
+  display: inline-block;
+  padding: 1.2rem 3rem;
+  background: transparent;
+  color: $text-color;
+  font-weight: 400;
+  font-size: 1.1rem;
+  border: 1px solid $text-color;
+  border-radius: 0;
+  text-decoration: none;
+  transition: all 0.6s $ease-out-expo;
+  @include fade-in-up(0.4s);
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: $text-color;
+    transition: left 0.6s $ease-out-expo;
+    z-index: -1;
+  }
+
+  &:hover {
+    color: $primary-bg;
 
     &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: $text-color;
-        transition: left 0.6s $ease-out-expo;
-        z-index: -1;
+      left: 0;
     }
+  }
 
-    &:hover {
-        color: $primary-bg;
+  @include respond(small_mobile) {
+    font-size: 0.8rem !important;
+  }
 
-        &::before {
-            left: 0;
-        }
-    }
+  @include respond(mobile) {
+    font-size: 1rem;
+    padding: 1rem 0.5rem;
+    min-width: 180px;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+  }
 
-    @include respond(small_mobile) {
-        font-size: 0.8rem !important;
-    }
-
-    @include respond(mobile) {
-        font-size: 1rem;
-        padding: 1rem 0.5rem;
-        min-width: 180px;
-        text-align: center;
-        display: block;
-        margin: 0 auto;
-        width: fit-content;
-    }
-
-    @include respond(tablet) {
-        font-size: 1.2rem;
-        padding: 1.3rem 2.5rem;
-    }
+  @include respond(tablet) {
+    font-size: 1.2rem;
+    padding: 1.3rem 2.5rem;
+  }
 }
-
 
 // Секція "Про мене"
 .about-section {
-    padding: 8rem 2rem;
-    background: $primary-bg;
-    position: relative;
-    overflow: hidden;
-    opacity: 0; // Початковий стан
-    transform: translateY(50px); // Початковий стан
-    transition: all 0.8s $ease-out-expo;
+  padding: 8rem 2rem;
+  background: $primary-bg;
+  position: relative;
+  overflow: hidden;
+  opacity: 0; // Початковий стан
+  transform: translateY(50px); // Початковий стан
+  transition: all 0.8s $ease-out-expo;
 
-    // Коли секція видима у viewport
-    &.visible {
-        opacity: 1; // Кінцевий стан
-        transform: translateY(0); // Кінцевий стан
-    }
+  // Коли секція видима у viewport
+  &.visible {
+    opacity: 1; // Кінцевий стан
+    transform: translateY(0); // Кінцевий стан
+  }
 
-    @include respond(tablet) {
-        padding: 8rem 0.2rem;
-    }
+  @include respond(tablet) {
+    padding: 8rem 0.2rem;
+  }
 
-    @include respond(mobile) {
-        padding: 6rem 1.5rem;
-    }
+  @include respond(mobile) {
+    padding: 6rem 1.5rem;
+  }
 }
 
 .about-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .about-section-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+  padding: 0 24px;
 
-    @include respond(tablet) {
-        gap: 0px;
-        padding: 0 0px;
-    }
+  @include respond(tablet) {
+    gap: 0px;
+    padding: 0 0px;
+  }
 
-    @include respond(mobile) {
-        padding: initial;
-    }
+  @include respond(mobile) {
+    position: relative; /* Щоб лава-лампа позиціонувалася відносно всієї секції */
+    display: block; /* Перетворюємо флекс на звичайний потік */
+    padding: 0 16px; /* Нормальні відступи від країв екрану */
+  }
 }
 
 .about-left-section {
-    flex: 0 0 60%;
-    max-width: 70%;
-    padding: 20px 60px;
+  flex: 0 0 60%;
+  max-width: 70%;
+  padding: 0px 15px;
 
-    @include respond(tablet) {
-        padding: 0px 30px 10px 15px;
-    }
+  @include respond(tablet) {
+    padding: 0px 30px 10px 15px;
+  }
 
-    @include respond(mobile) {
-        flex: initial;
-        max-width: initial;
-        padding: initial;
-        position: absolute;
-        z-index: 9999;
-    }
+  @include respond(mobile) {
+    flex: 100%;
+    max-width: 100%;
+    padding: 2rem 0; /* Прибираємо бокові паддінги, щоб текст не стискався праворуч-ліворуч */
+    position: relative;
+    z-index: 2; /* Текст завжди чітко поверх лампи */
+  }
 }
 
 .about-right-secction {
-    flex: 0 0 30%;
-    max-width: 30%;
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-    background: #0a0a0a;
-    border-radius: 0;
-    isolation: isolate;
-    opacity: 0;
-    transform: translateX(50px);
-    transition: all 0.8s $ease-out-expo 0.6s;
+  flex: 0 0 30%;
+  max-width: 30%;
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: #0a0a0a;
+  border-radius: 0;
+  isolation: isolate;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s $ease-out-expo 0.6s;
+
+  .about-section.visible & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @include respond(tablet) {
+    flex: 0 0 40%;
+    max-width: initial;
+    height: auto;
+    min-height: 500px;
+  }
+
+  @include respond(mobile) {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important; /* Лампа автоматично стає за висотою всієї секції разом із довгим текстом */
+    max-width: 100% !important;
+    z-index: 1; /* Падає на фон під текст */
+    transform: none !important;
+    pointer-events: none;
+    opacity: 0.3; /* Робимо її тьмянішою, щоб текст ідеально читався */
 
     .about-section.visible & {
-        opacity: 1;
-        transform: translateX(0);
+      opacity: 0.3;
+      transform: none !important;
     }
-
-    @include respond(tablet) {
-        flex: 0 0 40%;
-        max-width: initial;
-        height: auto;
-        min-height: 500px;
-    }
-
-    @include respond(mobile) {
-        flex: 100%;
-        max-width: 100%;
-        width: 300px;
-        z-index: 0;
-    }
+  }
 }
 
 .lava-lamp-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
 
-    @include respond(tablet) {
-        height: 100%; // Гарантуємо, що контейнер також займає всю висоту
-    }
+  @include respond(tablet) {
+    height: 100%; // Гарантуємо, що контейнер також займає всю висоту
+  }
 }
 
 .lava-lamp {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #0a0a0a;
-    overflow: hidden;
-    border-radius: 0;
-    mask-image: linear-gradient(to bottom,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #0a0a0a;
+  overflow: hidden;
+  border-radius: 0;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
 
-    @include respond(tablet) {
-        height: 100%; // Розтягуємо на всю висоту батьківського контейнера
-        min-height: 500px; // Мінімальна висота
+  @include respond(tablet) {
+    height: 100%; // Розтягуємо на всю висоту батьківського контейнера
+    min-height: 500px; // Мінімальна висота
 
-        // Оновлюємо маску для більшої висоти
-        mask-image: linear-gradient(to bottom,
-                transparent 0%,
-                black 5%,
-                black 95%,
-                transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom,
-                transparent 0%,
-                black 5%,
-                black 95%,
-                transparent 100%);
-    }
+    // Оновлюємо маску для більшої висоти
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 5%,
+      black 95%,
+      transparent 100%
+    );
+  }
 }
 
 .lamp-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    filter: url(#goo);
-    box-shadow:
-        inset 0 50px 30px -30px #0a0a0a,
-        inset 0 -50px 30px -30px #0a0a0a;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: url(#goo);
+  box-shadow:
+    inset 0 50px 30px -30px #0a0a0a,
+    inset 0 -50px 30px -30px #0a0a0a;
 
-    // Оновлюємо затемнення для розтягнутого lava-lamp
-    @include respond(tablet) {
-        box-shadow:
-            inset 0 70px 40px -40px #0a0a0a,
-            inset 0 -70px 40px -40px #0a0a0a;
-    }
+  // Оновлюємо затемнення для розтягнутого lava-lamp
+  @include respond(tablet) {
+    box-shadow:
+      inset 0 70px 40px -40px #0a0a0a,
+      inset 0 -70px 40px -40px #0a0a0a;
+  }
 }
 
 .blob {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #ff5e00, #ff1e00, #ff8c00);
-    filter: blur(8px);
-    opacity: 0.9;
-    mix-blend-mode: screen;
-    transform-origin: center;
-    transition: transform 0.5s ease-out, filter 0.5s ease-out;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow:
-        0 0 60px rgba(255, 94, 0, 0.6),
-        0 0 100px rgba(255, 30, 0, 0.4);
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff5e00, #ff1e00, #ff8c00);
+  filter: blur(8px);
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  transform-origin: center;
+  transition:
+    transform 0.5s ease-out,
+    filter 0.5s ease-out;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 0 60px rgba(255, 94, 0, 0.6),
+    0 0 100px rgba(255, 30, 0, 0.4);
 }
 
 /* Розміри та анімація для різних крапель */
 .blob:nth-child(1) {
-    width: 100px;
-    height: 100px;
-    left: 20%;
-    animation: blob-one 8s ease-in-out infinite;
+  width: 100px;
+  height: 100px;
+  left: 20%;
+  animation: blob-one 8s ease-in-out infinite;
 }
 
 .blob:nth-child(2) {
-    width: 80px;
-    height: 80px;
-    left: 50%;
-    animation: blob-two 6s ease-in-out infinite 1s;
+  width: 80px;
+  height: 80px;
+  left: 50%;
+  animation: blob-two 6s ease-in-out infinite 1s;
 }
 
 .blob:nth-child(3) {
-    width: 120px;
-    height: 120px;
-    left: 70%;
-    animation: blob-three 10s ease-in-out infinite 0.5s;
+  width: 120px;
+  height: 120px;
+  left: 70%;
+  animation: blob-three 10s ease-in-out infinite 0.5s;
 }
 
 .blob:nth-child(4) {
-    width: 60px;
-    height: 60px;
-    left: 40%;
-    animation: blob-four 7s ease-in-out infinite 2s;
+  width: 60px;
+  height: 60px;
+  left: 40%;
+  animation: blob-four 7s ease-in-out infinite 2s;
 }
 
 .blob:nth-child(5) {
-    width: 90px;
-    height: 90px;
-    left: 80%;
-    animation: blob-five 9s ease-in-out infinite 1.5s;
+  width: 90px;
+  height: 90px;
+  left: 80%;
+  animation: blob-five 9s ease-in-out infinite 1.5s;
 }
 
 /* Анімації руху */
 @keyframes blob-one {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    bottom: 10%;
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        bottom: 10%;
-    }
-
-    50% {
-        transform: translateY(-250px) scale(1.2) rotate(180deg);
-        bottom: 70%;
-    }
+  50% {
+    transform: translateY(-250px) scale(1.2) rotate(180deg);
+    bottom: 70%;
+  }
 }
 
 @keyframes blob-two {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    bottom: 5%;
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        bottom: 5%;
-    }
-
-    50% {
-        transform: translateY(-200px) scale(1.3) rotate(120deg);
-        bottom: 60%;
-    }
+  50% {
+    transform: translateY(-200px) scale(1.3) rotate(120deg);
+    bottom: 60%;
+  }
 }
 
 @keyframes blob-three {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    bottom: 15%;
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        bottom: 15%;
-    }
-
-    50% {
-        transform: translateY(-300px) scale(1.1) rotate(90deg);
-        bottom: 80%;
-    }
+  50% {
+    transform: translateY(-300px) scale(1.1) rotate(90deg);
+    bottom: 80%;
+  }
 }
 
 @keyframes blob-four {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    bottom: 8%;
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        bottom: 8%;
-    }
-
-    50% {
-        transform: translateY(-180px) scale(1.4) rotate(210deg);
-        bottom: 50%;
-    }
+  50% {
+    transform: translateY(-180px) scale(1.4) rotate(210deg);
+    bottom: 50%;
+  }
 }
 
 @keyframes blob-five {
+  0%,
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    bottom: 12%;
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        bottom: 12%;
-    }
-
-    50% {
-        transform: translateY(-220px) scale(1.25) rotate(150deg);
-        bottom: 65%;
-    }
+  50% {
+    transform: translateY(-220px) scale(1.25) rotate(150deg);
+    bottom: 65%;
+  }
 }
 
 .lava-filter {
-    position: absolute;
-    width: 0;
-    height: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .about-title {
-    font-size: 3.5rem;
-    font-weight: 300;
-    margin-bottom: 4rem;
-    text-align: center;
-    letter-spacing: 3px;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: $title-color;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s $ease-out-expo 0.2s;
+  font-size: 3.5rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 3px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: $title-color;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s $ease-out-expo 0.2s;
 
-    .about-section.visible & {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  .about-section.visible & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @include respond(mobile) {
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: $title-color;
+    margin: 2rem auto 0;
+    transition: width 0.8s $ease-out-expo;
 
     @include respond(mobile) {
-        font-size: 2.8rem;
-        margin-bottom: 2rem;
+      margin: 1rem auto 0;
     }
+  }
 
-    &::after {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 2px;
-        background: $title-color;
-        margin: 2rem auto 0;
-        transition: width 0.8s $ease-out-expo;
-
-        @include respond(mobile) {
-            margin: 1rem auto 0;
-        }
-    }
-
-    &:hover::after {
-        width: 120px;
-    }
+  &:hover::after {
+    width: 120px;
+  }
 }
 
 .about-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 4rem;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: start;
 
-    @include respond(tablet) {
-        display: initial;
-    }
+  @include respond(tablet) {
+    display: initial;
+  }
 
-    @include respond(mobile) {
-        gap: initial;
-    }
+  @include respond(mobile) {
+    gap: initial;
+  }
 }
 
 .about-text {
-    font-size: 1.8rem;
-    line-height: 1.8;
-    font-weight: 300;
-    opacity: 0;
-    margin: 0;
-    transform: translateX(-50px);
-    transition: all 0.8s $ease-out-expo 0.4s;
+  font-size: 1.8rem;
+  line-height: 1.8;
+  font-weight: 300;
+  opacity: 0;
+  margin: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s $ease-out-expo 0.4s;
 
-    .about-section.visible & {
-        opacity: 0.9;
-        transform: translateX(0);
-    }
+  .about-section.visible & {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
 
-    @include respond(tablet) {
-        font-size: 2rem;
-    }
+  @include respond(tablet) {
+    font-size: 2rem;
+  }
 
-    @include respond(mobile) {
-        font-size: 1.6rem;
-    }
+  @include respond(mobile) {
+    font-size: 1.6rem;
+  }
 
-    @include respond(small_mobile) {
-        line-height: initial;
-    }
+  @include respond(small_mobile) {
+    line-height: initial;
+  }
 }
 
 .about-skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    opacity: 0; // Початковий стан
-    transform: translateY(30px); // Початковий стан
-    transition: all 0.8s $ease-out-expo 0.8s;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  opacity: 0; // Початковий стан
+  transform: translateY(30px); // Початковий стан
+  transition: all 0.8s $ease-out-expo 0.8s;
+  justify-content: center;
 
-    .about-section.visible & {
-        opacity: 1; // Кінцевий стан
-        transform: translateY(0); // Кінцевий стан
-    }
+  .about-section.visible & {
+    opacity: 1; // Кінцевий стан
+    transform: translateY(0); // Кінцевий стан
+  }
 
-    @include respond(tablet) {
-        justify-content: center;
-    }
+  @include respond(tablet) {
+    justify-content: center;
+  }
 
-    @include respond(mobile) {
-        justify-content: center;
-    }
+  @include respond(mobile) {
+    justify-content: center;
+  }
 }
 
 .skill-tag {
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid $border-color;
-    border-radius: 25px;
-    font-size: 1.1rem;
-    font-weight: 300;
-    transition: all 0.4s $ease-out-expo;
-    backdrop-filter: blur(10px);
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.6s $ease-out-expo;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba($text-color, 0.12);
+  border-radius: 999px;
+  color: $text-color;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition:
+    opacity 0.45s $ease-out-expo,
+    transform 0.45s $ease-out-expo,
+    background-color 0.45s $ease-out-expo,
+    border-color 0.45s $ease-out-expo,
+    color 0.45s $ease-out-expo,
+    box-shadow 0.45s $ease-out-expo;
 
-    .about-section.visible & {
-        opacity: 1;
-        transform: scale(1);
-    }
+  .about-section.visible & {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 
-    // Затримка для кожної навички окремо
-    @for $i from 1 through 10 {
-        &:nth-child(#{$i}) {
-            transition-delay: #{0.8 + ($i * 0.1)}s;
-        }
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      transition-delay: #{0.75 + ($i * 0.08)}s;
     }
+  }
 
-    &:hover {
-        background: rgba(255, 204, 0, 0.1);
-        border-color: $accent-color;
-        transform: translateY(-5px) scale(1.05);
-    }
+  &:hover {
+    background: rgba($accent-color, 0.08);
+    border-color: rgba($accent-color, 0.45);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 18px rgba($accent-color, 0.12);
+  }
 
-    @include respond(mobile) {
-        font-size: 1rem;
-        padding: 0.8rem 1.5rem;
-    }
+  @include respond(mobile) {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.2rem;
+  }
 }
 
 // Секція "Портфоліо"
 .portfolio-section {
-    padding: 4rem 2rem;
-    background: $primary-bg;
-    text-align: center;
+  padding: 4rem 2rem;
+  background: $primary-bg;
+  text-align: center;
 
-    @include respond(mobile) {
-        padding: 6rem 1.5rem;
-    }
+  @include respond(mobile) {
+    padding: 6rem 1.5rem;
+  }
 }
 
 .portfolio-container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .portfolio-title {
-    font-size: 3.5rem;
-    font-weight: 300;
-    margin-bottom: 3rem;
-    letter-spacing: 3px;
+  font-size: 3.5rem;
+  font-weight: 300;
+  margin-bottom: 3rem;
+  letter-spacing: 3px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: $title-color;
+  @include fade-in-up(0.7s);
+
+  @include respond(mobile) {
+    font-size: 2.8rem;
+    /* М'якший градієнт для мобільних */
     -webkit-background-clip: text;
     background-clip: text;
-    color: $title-color;
-    @include fade-in-up(0.7s);
-
-    @include respond(mobile) {
-        font-size: 2.8rem;
-        /* М'якший градієнт для мобільних */
-        -webkit-background-clip: text;
-        background-clip: text;
-    }
+  }
 }
 
 .portfolio-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem 3rem;
-    background: transparent;
-    color: $text-color;
-    font-size: 1.3rem;
-    font-weight: 300;
-    text-decoration: none;
-    border: 1px solid $text-color;
-    border-radius: 0;
-    transition: all 0.6s $ease-out-expo;
-    @include fade-in-up(0.9s);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 3rem;
+  background: transparent;
+  color: $text-color;
+  font-size: 1.3rem;
+  font-weight: 300;
+  text-decoration: none;
+  border: 1px solid $text-color;
+  border-radius: 0;
+  transition: all 0.6s $ease-out-expo;
+  @include fade-in-up(0.9s);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 1px;
 
-    @include respond(mobile) {
-        font-size: 1.1rem;
-        padding: 1.2rem 2.5rem;
-    }
+  @include respond(mobile) {
+    font-size: 1.1rem;
+    padding: 1.2rem 2.5rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: $text-color;
+    transition: left 0.6s $ease-out-expo;
+    z-index: -1;
+  }
+
+  &:hover {
+    color: $secondary-bg;
+    padding-right: 4rem;
 
     &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: $text-color;
-        transition: left 0.6s $ease-out-expo;
-        z-index: -1;
+      left: 0;
     }
 
-    &:hover {
-        color: $secondary-bg;
-        padding-right: 4rem;
-
-        &::before {
-            left: 0;
-        }
-
-        .cta-arrow {
-            transform: translateX(5px);
-        }
+    .cta-arrow {
+      transform: translateX(5px);
     }
+  }
 }
 
 .cta-arrow {
-    transition: transform 0.4s $ease-out-expo;
+  transition: transform 0.4s $ease-out-expo;
 }
 
 .scroll-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: all 0.4s $ease-out-expo;
-    z-index: 999;
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.4s $ease-out-expo;
+  z-index: 999;
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    }
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: $text-color;
+    transition: transform 0.3s $ease-out-expo;
+  }
+
+  // Показуємо кнопку
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  // Ефект при натисканні
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @include respond(mobile) {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 45px;
+    height: 45px;
 
     svg {
-        width: 20px;
-        height: 20px;
-        color: $text-color;
-        transition: transform 0.3s $ease-out-expo;
+      width: 18px;
+      height: 18px;
     }
-
-    // Показуємо кнопку
-    &.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
-    // Ефект при натисканні
-    &:active {
-        transform: scale(0.95);
-    }
-
-    @include respond(mobile) {
-        bottom: 1.5rem;
-        right: 1.5rem;
-        width: 45px;
-        height: 45px;
-
-        svg {
-            width: 18px;
-            height: 18px;
-        }
-    }
+  }
 }
 
 // Кастомний курсор
 .animated-cursor {
-    // Базові стилі
-    position: fixed;
-    width: $cursor-size;
-    height: $cursor-size;
-    border: 2px solid $cursor-color;
+  // Базові стилі
+  position: fixed;
+  width: $cursor-size;
+  height: $cursor-size;
+  border: 2px solid $cursor-color;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: $cursor-transition;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+
+  // Базове світіння
+  box-shadow:
+    0 0 15px 5px rgba($cursor-glow-color, 0.4),
+    inset 0 0 10px 2px rgba($cursor-glow-color, 0.2);
+
+  // Точка всередині круга
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $cursor-dot-size;
+    height: $cursor-dot-size;
+    background: $cursor-color;
     border-radius: 50%;
-    pointer-events: none;
-    mix-blend-mode: difference;
-    transition: $cursor-transition;
-    z-index: 9999;
-    top: 0;
-    left: 0;
     transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+    box-shadow: 0 0 8px 2px rgba($cursor-glow-color, 0.6);
+  }
 
-    // Базове світіння
-    box-shadow: 0 0 15px 5px rgba($cursor-glow-color, 0.4),
-        inset 0 0 10px 2px rgba($cursor-glow-color, 0.2);
+  // Анімація пульсації світіння
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $cursor-size * 1.5;
+    height: $cursor-size * 1.5;
+    border: 1px solid rgba($cursor-glow-color, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite ease-in-out;
+    pointer-events: none;
+  }
 
-    // Точка всередині круга
-    &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: $cursor-dot-size;
-        height: $cursor-dot-size;
-        background: $cursor-color;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: all 0.2s ease;
-        box-shadow: 0 0 8px 2px rgba($cursor-glow-color, 0.6);
-    }
+  // Приховування для мобільних пристроїв
+  @include respond(mobile) {
+    display: none !important;
+  }
 
-    // Анімація пульсації світіння
+  // Для планшетів - можна зменшити розмір або приховати
+  @include respond(tablet) {
+    width: $cursor-size * 0.8;
+    height: $cursor-size * 0.8;
+
     &::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: $cursor-size * 1.5;
-        height: $cursor-size * 1.5;
-        border: 1px solid rgba($cursor-glow-color, 0.3);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        animation: pulse 2s infinite ease-in-out;
-        pointer-events: none;
+      width: $cursor-size * 1.2;
+      height: $cursor-size * 1.2;
+    }
+  }
+
+  // Для десктопу - повний функціонал
+  @include respond(desktop) {
+    display: block;
+  }
+
+  // Стан при кліку
+  &.click {
+    transform: translate(-50%, -50%) scale(0.85);
+    border-color: $cursor-click-color;
+    background: rgba($cursor-click-color, 0.2);
+    box-shadow:
+      0 0 25px 10px rgba($cursor-glow-color, 0.6),
+      inset 0 0 15px 5px rgba($cursor-glow-color, 0.3);
+
+    &::after {
+      background: $cursor-click-color;
+      transform: translate(-50%, -50%) scale(1.2);
+      box-shadow: 0 0 12px 4px rgba($cursor-glow-color, 0.8);
     }
 
-    // Приховування для мобільних пристроїв
-    @include respond(mobile) {
-        display: none !important;
+    &::before {
+      animation: pulse-fast 0.5s infinite ease-in-out;
+    }
+  }
+
+  // Стан при наведенні на клікабельні елементи
+  &.hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    border-color: $cursor-hover-color;
+    box-shadow:
+      0 0 20px 8px rgba($cursor-glow-color, 0.5),
+      inset 0 0 12px 4px rgba($cursor-glow-color, 0.25);
+
+    &::after {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: $cursor-hover-color;
+      box-shadow: 0 0 15px 5px rgba($cursor-glow-color, 0.7);
     }
 
-    // Для планшетів - можна зменшити розмір або приховати
-    @include respond(tablet) {
-        width: $cursor-size * 0.8;
-        height: $cursor-size * 0.8;
+    &::before {
+      width: $cursor-size * 2;
+      height: $cursor-size * 2;
+      border-color: rgba($cursor-glow-color, 0.4);
+    }
+  }
 
-        &::before {
-            width: $cursor-size * 1.2;
-            height: $cursor-size * 1.2;
-        }
+  // Стан при наведенні на текст
+  &.text-hover {
+    transform: translate(-50%, -50%) scale(2);
+    border-color: transparent;
+    background: rgba($cursor-color, 0.1);
+    box-shadow: 0 0 30px 12px rgba($cursor-glow-color, 0.3);
+
+    &::after {
+      transform: translate(-50%, -50%) scale(0.8);
+      background: $cursor-color;
+      box-shadow: 0 0 10px 3px rgba($cursor-glow-color, 0.5);
     }
 
-    // Для десктопу - повний функціонал
-    @include respond(desktop) {
-        display: block;
+    &::before {
+      width: $cursor-size * 2.5;
+      height: $cursor-size * 2.5;
+      animation: pulse-slow 3s infinite ease-in-out;
     }
+  }
 
-    // Стан при кліку
-    &.click {
-        transform: translate(-50%, -50%) scale(0.85);
-        border-color: $cursor-click-color;
-        background: rgba($cursor-click-color, 0.2);
-        box-shadow: 0 0 25px 10px rgba($cursor-glow-color, 0.6),
-            inset 0 0 15px 5px rgba($cursor-glow-color, 0.3);
+  // Ефект при швидкому русі
+  &.fast-move {
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 0 30px 15px rgba($cursor-glow-color, 0.7);
 
-        &::after {
-            background: $cursor-click-color;
-            transform: translate(-50%, -50%) scale(1.2);
-            box-shadow: 0 0 12px 4px rgba($cursor-glow-color, 0.8);
-        }
-
-        &::before {
-            animation: pulse-fast 0.5s infinite ease-in-out;
-        }
+    &::after {
+      transform: translate(-50%, -50%) scale(1.1);
     }
-
-    // Стан при наведенні на клікабельні елементи
-    &.hover {
-        transform: translate(-50%, -50%) scale(1.3);
-        border-color: $cursor-hover-color;
-        box-shadow: 0 0 20px 8px rgba($cursor-glow-color, 0.5),
-            inset 0 0 12px 4px rgba($cursor-glow-color, 0.25);
-
-        &::after {
-            transform: translate(-50%, -50%) scale(1.5);
-            background: $cursor-hover-color;
-            box-shadow: 0 0 15px 5px rgba($cursor-glow-color, 0.7);
-        }
-
-        &::before {
-            width: $cursor-size * 2;
-            height: $cursor-size * 2;
-            border-color: rgba($cursor-glow-color, 0.4);
-        }
-    }
-
-    // Стан при наведенні на текст
-    &.text-hover {
-        transform: translate(-50%, -50%) scale(2);
-        border-color: transparent;
-        background: rgba($cursor-color, 0.1);
-        box-shadow: 0 0 30px 12px rgba($cursor-glow-color, 0.3);
-
-        &::after {
-            transform: translate(-50%, -50%) scale(0.8);
-            background: $cursor-color;
-            box-shadow: 0 0 10px 3px rgba($cursor-glow-color, 0.5);
-        }
-
-        &::before {
-            width: $cursor-size * 2.5;
-            height: $cursor-size * 2.5;
-            animation: pulse-slow 3s infinite ease-in-out;
-        }
-    }
-
-    // Ефект при швидкому русі
-    &.fast-move {
-        transform: translate(-50%, -50%) scale(0.9);
-        box-shadow: 0 0 30px 15px rgba($cursor-glow-color, 0.7);
-
-        &::after {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-    }
+  }
 }
 
 // Анімації пульсації
 @keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    0%,
-    100% {
-        opacity: 0.5;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 0.2;
-        transform: translate(-50%, -50%) scale(1.2);
-    }
+  50% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
 }
 
 @keyframes pulse-fast {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    0%,
-    100% {
-        opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 0.3;
-        transform: translate(-50%, -50%) scale(1.3);
-    }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
 }
 
 @keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-    0%,
-    100% {
-        opacity: 0.4;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    50% {
-        opacity: 0.1;
-        transform: translate(-50%, -50%) scale(1.4);
-    }
+  50% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
 }
 
 // Сховати стандартний курсор тільки для десктопу
 html {
+  // Для десктопу - сховати стандартний курсор
+  @include respond(desktop) {
+    cursor: none;
+  }
 
-    // Для десктопу - сховати стандартний курсор
+  // Для планшетів - умовно можна залишити або сховати
+  @include respond(tablet) {
+    cursor: none;
+
+    // Або залишити стандартний:
+    // cursor: auto;
+  }
+
+  // Для мобільних - завжди стандартний курсор
+  @include respond(mobile) {
+    cursor: auto;
+  }
+
+  // Стилі для інпутів
+  input,
+  textarea,
+  select,
+  button {
     @include respond(desktop) {
-        cursor: none;
+      cursor: none;
     }
 
-    // Для планшетів - умовно можна залишити або сховати
-    @include respond(tablet) {
-        cursor: none;
-
-        // Або залишити стандартний:
-        // cursor: auto;
-    }
-
-    // Для мобільних - завжди стандартний курсор
     @include respond(mobile) {
-        cursor: auto;
+      cursor: auto;
     }
-
-    // Стилі для інпутів
-    input,
-    textarea,
-    select,
-    button {
-        @include respond(desktop) {
-            cursor: none;
-        }
-
-        @include respond(mobile) {
-            cursor: auto;
-        }
-    }
+  }
 }
 
 [data-cursor-hover],
 [data-cursor-text] {
-    @include respond(desktop) {
-        cursor: none !important;
-    }
+  @include respond(desktop) {
+    cursor: none !important;
+  }
 }
 
 // Секція "Рекомендації"
 .recommendation-section {
-    padding: 8rem 2rem;
-    background: $primary-bg;
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s $ease-out-expo;
+  padding: 8rem 2rem;
+  background: $primary-bg;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s $ease-out-expo;
 
-    // Коли секція видима у viewport
-    &.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  // Коли секція видима у viewport
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    @include respond(mobile) {
-        padding: 6rem 1.5rem;
-    }
+  @include respond(mobile) {
+    padding: 6rem 1.5rem;
+  }
 }
 
 .portfolio-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .recommendation-section-container {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 
-    @include respond(mobile) {
-        gap: 10px;
-    }
+  @include respond(mobile) {
+    gap: 10px;
+  }
 }
 
 .recommendation-title {
-    font-size: 3.5rem;
-    font-weight: 300;
-    margin-bottom: 2rem;
-    text-align: center;
-    letter-spacing: 3px;
-    color: $title-color;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s $ease-out-expo 0.2s;
+  font-size: 3.5rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 3px;
+  color: $title-color;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s $ease-out-expo 0.2s;
 
-    .recommendation-section.visible & {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  .recommendation-section.visible & {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    @include respond(small_mobile) {
-        font-size: 2rem !important;
-    }
+  @include respond(small_mobile) {
+    font-size: 2rem !important;
+  }
+
+  @include respond(mobile) {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: $title-color;
+    margin: 2rem auto 0;
+    transition: width 0.8s $ease-out-expo;
 
     @include respond(mobile) {
-        font-size: 2.4rem;
-        margin-bottom: 0.5rem;
+      margin: 1rem auto 0;
     }
+  }
 
-    &::after {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 2px;
-        background: $title-color;
-        margin: 2rem auto 0;
-        transition: width 0.8s $ease-out-expo;
-
-        @include respond(mobile) {
-            margin: 1rem auto 0;
-        }
-    }
-
-    &:hover::after {
-        width: 120px;
-    }
+  &:hover::after {
+    width: 120px;
+  }
 }
 
 .recommendation-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    padding: 0 24px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s $ease-out-expo 0.4s;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 0 24px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s $ease-out-expo 0.4s;
 
-    .recommendation-section.visible & {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  .recommendation-section.visible & {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-    @include respond(tablet) {
-        flex-wrap: initial;
-    }
+  @include respond(tablet) {
+    flex-wrap: initial;
+  }
 
-    @include respond(mobile) {
-        padding: initial;
-        gap: 20px;
-    }
+  @include respond(mobile) {
+    padding: initial;
+    gap: 20px;
+  }
 }
 
 .recommendation-left-section {
+  flex: 0 0 40%;
+  max-width: 40%;
+  padding: 20px;
+
+  @include respond(tablet) {
     flex: 0 0 40%;
     max-width: 40%;
     padding: 20px;
+  }
 
-    @include respond(tablet) {
-        flex: 0 0 40%;
-        max-width: 40%;
-        padding: 20px;
-    }
-
-    @include respond(mobile) {
-        flex: 100%;
-        max-width: 100%;
-        padding: 10px;
-    }
+  @include respond(mobile) {
+    flex: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
 }
 
 .recommendation-letter-pdf {
-    width: 100%;
-    height: 500px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid $border-color;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    transition: all 0.4s $ease-out-expo;
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s $ease-out-expo;
+  position: relative;
+  overflow: hidden;
 
-    @include respond(tablet) {
-        height: 300px;
+  @include respond(tablet) {
+    height: 300px;
+  }
+
+  &:hover {
+    border-color: $accent-color;
+    background: rgba(255, 255, 255, 0.08);
+
+    .pdf-overlay {
+      opacity: 1;
     }
+  }
 
-    &:hover {
-        border-color: $accent-color;
-        background: rgba(255, 255, 255, 0.08);
-
-        .pdf-overlay {
-            opacity: 1;
-        }
-    }
-
-    @include respond(mobile) {
-        height: 300px;
-    }
+  @include respond(mobile) {
+    height: 300px;
+  }
 }
 
 .pdf-preview-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .pdf-canvas {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .pdf-overlay {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s $ease-out-expo;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s $ease-out-expo;
 }
 
 .pdf-open-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background: rgba($accent-color, 0.9);
-    color: #000;
-    border: none;
-    border-radius: 25px;
-    font-size: 1.4rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s $ease-out-expo;
-    backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba($accent-color, 0.9);
+  color: #000;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s $ease-out-expo;
+  backdrop-filter: blur(10px);
 
-    &:hover {
-        background: $accent-color;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba($accent-color, 0.3);
-    }
+  &:hover {
+    background: $accent-color;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba($accent-color, 0.3);
+  }
 
-    svg {
-        transition: transform 0.3s $ease-out-expo;
-    }
+  svg {
+    transition: transform 0.3s $ease-out-expo;
+  }
 
-    &:hover svg {
-        transform: translateX(2px);
-    }
+  &:hover svg {
+    transform: translateX(2px);
+  }
 
-    @include respond(mobile) {
-        padding: 10px 20px;
-        font-size: 1.2rem;
-    }
+  @include respond(mobile) {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+  }
 }
 
 // Стилі для стану завантаження
 .pdf-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $text-color;
-    font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-color;
+  font-size: 1.6rem;
 
-    &::after {
-        content: '...';
-        animation: loading 1.5s infinite;
-    }
+  &::after {
+    content: "...";
+    animation: loading 1.5s infinite;
+  }
 }
 
 @keyframes loading {
+  0%,
+  33% {
+    content: ".";
+  }
 
-    0%,
-    33% {
-        content: '.';
-    }
+  34%,
+  66% {
+    content: "..";
+  }
 
-    34%,
-    66% {
-        content: '..';
-    }
-
-    67%,
-    100% {
-        content: '...';
-    }
+  67%,
+  100% {
+    content: "...";
+  }
 }
 
 .recommendation-right-section {
+  flex: 0 0 55%;
+  max-width: 55%;
+  padding: 20px;
+
+  @include respond(tablet) {
     flex: 0 0 55%;
     max-width: 55%;
     padding: 20px;
+  }
 
-    @include respond(tablet) {
-        flex: 0 0 55%;
-        max-width: 55%;
-        padding: 20px;
-    }
-
-    @include respond(mobile) {
-        flex: 100%;
-        max-width: 100%;
-        padding: 10px;
-    }
+  @include respond(mobile) {
+    flex: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
 }
 
 .text-scroller {
-    width: 100%;
-    height: 500px;
+  width: 100%;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s $ease-out-expo 0.8s;
+
+  .recommendation-section.visible & {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  // Стилі для скролбару
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid $border-color;
-    border-radius: 12px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-    overflow-y: auto;
-    opacity: 0;
-    transform: translateX(50px);
-    transition: all 0.8s $ease-out-expo 0.8s;
+    border-radius: 3px;
+  }
 
-    .recommendation-section.visible & {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  &::-webkit-scrollbar-thumb {
+    background: $accent-color;
+    border-radius: 3px;
+  }
 
-    // Стилі для скролбару
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
+  &:hover {
+    border-color: $accent-color;
+    background: rgba(255, 255, 255, 0.08);
+  }
 
-    &::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 3px;
-    }
+  @include respond(mobile) {
+    height: 300px;
+    padding: 1.5rem;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        background: $accent-color;
-        border-radius: 3px;
-    }
-
-    &:hover {
-        border-color: $accent-color;
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    @include respond(mobile) {
-        height: 300px;
-        padding: 1.5rem;
-    }
-
-    @include respond(small_mobile) {
-        height: 350px;
-        padding: 1.2rem;
-    }
+  @include respond(small_mobile) {
+    height: 350px;
+    padding: 1.2rem;
+  }
 }
 
 // Додаткові стилі для контенту всередині text-scroller
 .text-scroller-content {
-    font-size: 1.6rem;
-    line-height: 1.7;
-    color: $text-color;
-    font-weight: 300;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: $text-color;
+  font-weight: 300;
 
-    p {
-        margin-bottom: 1.5rem;
-        opacity: 0.9;
-    }
+  p {
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
 
-    strong {
-        color: $accent-color;
-        font-weight: 400;
-    }
+  strong {
+    color: $accent-color;
+    font-weight: 400;
+  }
 
-    @include respond(mobile) {
-        font-size: 1.4rem;
-        line-height: 1.6;
-    }
+  @include respond(mobile) {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
 }
 
 // Футер
 .footer {
-    background: rgba(10, 10, 10, 0.95);
-    border-top: 1px solid $border-color;
-    padding: 3rem 2rem 2rem;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
+  background: rgba(10, 10, 10, 0.95);
+  border-top: 1px solid $border-color;
+  padding: 3rem 2rem 2rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 
-    @include respond(mobile) {
-        padding: 2rem 1.5rem 1.5rem;
-    }
+  @include respond(mobile) {
+    padding: 2rem 1.5rem 1.5rem;
+  }
 }
 
 .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-content {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .social-links {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 
-    @include respond(mobile) {
-        gap: 1.5rem;
-    }
+  @include respond(mobile) {
+    gap: 1.5rem;
+  }
 
-    @include respond(small_mobile) {
-        gap: 1rem;
-    }
+  @include respond(small_mobile) {
+    gap: 1rem;
+  }
 }
 
 .social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    color: rgba($text-color, 0.7);
-    text-decoration: none;
-    border: 1px solid rgba($border-color, 0.3);
-    border-radius: 12px;
-    transition: all 0.4s $ease-out-expo;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  color: rgba($text-color, 0.7);
+  text-decoration: none;
+  border: 1px solid rgba($border-color, 0.3);
+  border-radius: 12px;
+  transition: all 0.4s $ease-out-expo;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  position: relative;
 
-    &:hover {
-        color: #FF6B35;
-        border-color: rgba(#FF6B35, 0.5);
-        background: rgba(#FF6B35, 0.05);
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(#FF6B35, 0.2);
-
-        .social-icon {
-            transform: scale(1.1);
-        }
-    }
+  &:hover {
+    color: #ff6b35;
+    border-color: rgba(#ff6b35, 0.5);
+    background: rgba(#ff6b35, 0.05);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(#ff6b35, 0.2);
 
     .social-icon {
-        width: 22px;
-        height: 22px;
-        transition: transform 0.3s $ease-out-expo;
+      transform: scale(1.1);
     }
+  }
 
-    @include respond(mobile) {
-        width: 45px;
-        height: 45px;
+  .social-icon {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.3s $ease-out-expo;
+  }
 
-        .social-icon {
-            width: 20px;
-            height: 20px;
-        }
+  @include respond(mobile) {
+    width: 45px;
+    height: 45px;
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
     }
+  }
 
-    @include respond(small_mobile) {
-        width: 40px;
-        height: 40px;
+  @include respond(small_mobile) {
+    width: 40px;
+    height: 40px;
 
-        .social-icon {
-            width: 18px;
-            height: 18px;
-        }
+    .social-icon {
+      width: 18px;
+      height: 18px;
     }
+  }
 }
 
 .footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid rgba($border-color, 0.2);
-
-    @include respond(mobile) {
-        padding-top: 1.5rem;
-    }
+  text-align: center;
 }
 
 .copyright {
-    font-size: 1.3rem;
-    color: rgba($text-color, 0.5);
-    margin: 0;
-    font-weight: 300;
+  font-size: 1.3rem;
+  color: rgba($text-color, 0.5);
+  margin: 0;
+  font-weight: 300;
 
-    @include respond(mobile) {
-        font-size: 1.2rem;
-    }
+  @include respond(mobile) {
+    font-size: 1.2rem;
+  }
 }
 
 // Анімація появи футера
 .footer {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s $ease-out-expo;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s $ease-out-expo;
 
-    &.visible {
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Layout для карток
+.cards-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  width: 100%;
+
+  @include respond(mobile) {
+    grid-template-columns: 1fr; // На мобілках стають одна під одною
+    gap: 1.5rem;
+  }
+}
+
+// Premium Card стилі
+.rec-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  min-height: 320px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba($title-color, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+    .pdf-open-btn {
+      background: $title-color;
+      color: #000;
+    }
+  }
+
+  @include respond(mobile) {
+    padding: 2rem 1.5rem;
+    min-height: auto;
+  }
+}
+
+.rec-card-header {
+  margin-bottom: 1.5rem;
+}
+
+.rec-project {
+  font-size: 2rem;
+  font-weight: 400;
+  color: $text-color;
+  margin: 0 0 0.5rem 0;
+}
+
+.rec-tags {
+  font-size: 1rem;
+  color: $title-color;
+  margin: 0;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.rec-card-body {
+  flex-grow: 1;
+  margin-bottom: 2rem;
+}
+
+.rec-quote {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  font-weight: 300;
+  color: rgba($text-color, 0.8);
+  font-style: italic;
+  margin: 0;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: 1rem;
+  }
+}
+
+.rec-card-footer {
+  .pdf-open-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: transparent;
+    color: $text-color;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(4px);
+    }
+  }
+}
+
+// Змінні та базові налаштування
+$bg-main: #0b0b0f;
+$text-main: #f4f4f6;
+$text-muted: #a1a1aa;
+$font-sans: "Inter", system-ui, sans-serif;
+$font-mono: "JetBrains Mono", monospace;
+
+.selected-work {
+  background-color: $bg-main;
+  color: $text-main;
+  padding: 6rem 1.5rem;
+  font-family: $font-sans;
+
+  @media (min-width: 768px) {
+    padding: 8rem 3rem;
+  }
+
+  .section-header,
+  .projects-container {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  // HEADER
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    margin-bottom: 1rem;
+  }
+
+  .section-idea {
+    display: inline-block;
+
+    margin-bottom: 2rem;
+
+    font-size: 4rem;
+
+    font-weight: 300;
+
+    letter-spacing: -0.04em;
+
+    color: $title-color;
+
+    @include respond(mobile) {
+      font-size: 2.8rem;
+    }
+
+    &::after {
+      content: "";
+
+      display: block;
+
+      width: 120px;
+      height: 2px;
+
+      background: $title-color;
+
+      margin: 1.5rem auto 0;
+
+      transition: width 0.8s $ease-out-expo;
+    }
+
+    &:hover::after {
+      width: 160px;
+    }
+  }
+
+  .section-title {
+    display: none;
+  }
+
+  // GRID СЕКЦІЇ
+  .projects-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem;
+    }
+
+    @media (min-width: 1200px) {
+      gap: 2.5rem;
+    }
+  }
+
+  // БАЗОВІ СТИЛІ КАРТКИ
+  .project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition:
+      transform 0.35s ease,
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+
+    .project-preview {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      border-radius: 1rem;
+      flex: 0 0 auto;
+    }
+
+    .project-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+
+      filter: brightness(0.82);
+
+      transition:
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.35s ease;
+    }
+
+    .project-identity {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.45rem 0.8rem;
+      border-radius: 9999px;
+      font-family: $font-mono;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 0.75rem;
+
+      padding: 1rem;
+
+      opacity: 0;
+      transform: translateY(10px);
+
+      pointer-events: none;
+
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.18) 45%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+
+      transition-delay: 0s;
+    }
+
+    &:hover {
+      .project-overlay {
         opacity: 1;
         transform: translateY(0);
+
+        pointer-events: auto;
+
+        transition-delay: 0.12s;
+      }
     }
+
+    .overlay-btn {
+      pointer-events: auto;
+
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+
+      padding: 0.7rem 1rem;
+      border-radius: 0.75rem;
+
+      color: #fff;
+
+      background: rgba(255, 255, 255, 0.1);
+
+      border: 1px solid rgba(255, 255, 255, 0.15);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+
+        background: rgba(255, 255, 255, 0.95);
+
+        color: #09090b;
+
+        border-color: rgba(255, 255, 255, 0.95);
+      }
+    }
+
+    .project-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.25rem 0 0 0;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .project-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+      line-height: 1.1;
+
+      @media (min-width: 768px) {
+        font-size: 1.875rem;
+      }
+    }
+
+    .project-description {
+      color: $text-muted;
+      font-weight: 300;
+      line-height: 1.65;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .stack-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      background: rgba(255, 255, 255, 0.04);
+      color: #d4d4d8;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      white-space: nowrap;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+
+      .btn {
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.65rem 1.15rem;
+        border-radius: 0.65rem;
+        transition: all 0.2s ease;
+      }
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+
+      .project-image {
+        transform: scale(1.04);
+        filter: brightness(0.72);
+      }
+
+      .project-overlay {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* -------------------------------------------------------------
+     1. REACT SHOP — Dark / Clean / Premium Product
+  ------------------------------------------------------------- */
+  .card-product {
+    background: rgba(39, 39, 42, 0.2);
+    border: 1px solid rgba(63, 63, 70, 0.4);
+    padding: 1.25rem;
+    border-radius: 1rem;
+
+    .project-preview {
+      background: #09090b;
+      border: 1px solid #27272a;
+    }
+
+    .project-identity {
+      color: #818cf8;
+    }
+
+    .pill {
+      background: rgba(79, 70, 229, 0.12);
+      color: #7d97ff;
+      border: 1px solid rgba(99, 102, 241, 0.22);
+    }
+
+    .overlay-btn {
+      &:first-child {
+        background: #4f46e5;
+        border-color: rgba(56, 46, 242, 0.35);
+
+        &:hover {
+          background: #4338ca;
+          color: #fff;
+          border-color: rgba(79, 70, 229, 0.35);
+        }
+      }
+
+      &:last-child {
+        background: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.95);
+          color: #09090b;
+        }
+      }
+    }
+
+    &:hover {
+      border-color: rgba(79, 70, 229, 0.3);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+  }
+
+  /* -------------------------------------------------------------
+     2. TASK MANAGER — Structured / Engineering Grid
+  ------------------------------------------------------------- */
+  .card-engineering {
+    background: #09090b;
+    border: 1px solid #27272a;
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+    font-family: $font-mono;
+
+    .project-preview {
+      background: rgba(39, 39, 42, 0.1);
+      border: 1px solid #27272a;
+    }
+
+    .project-identity {
+      font-size: 0.65rem;
+      color: #38bdf8;
+    }
+
+    .project-content {
+      background: #0d1117;
+      padding: 1.1rem 0 0 0;
+    }
+
+    .project-description {
+      font-family: $font-sans;
+      font-size: 0.875rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.22rem 0.65rem;
+      background: #18181b;
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 0.35rem;
+    }
+
+    .overlay-btn {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+
+      &:first-child {
+        background: #38bdf8;
+        color: #09090b;
+        border: 1px solid #7dd3fc;
+
+        &:hover {
+          background: #0ea5e9;
+          color: #09090b;
+        }
+      }
+
+      &:last-child {
+        background: rgba(255, 255, 255, 0.06);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.92);
+          color: #09090b;
+        }
+      }
+    }
+
+    .project-preview {
+      .blueprint-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.04;
+        background-size: 24px 24px;
+        background-image:
+          linear-gradient(to right, #808080 1px, transparent 1px),
+          linear-gradient(to bottom, #808080 1px, transparent 1px);
+      }
+
+      .preview-inner {
+        width: 100%;
+        height: 100%;
+        border: 1px dashed #27272a;
+        border-radius: 0.35rem;
+        background: rgba(9, 9, 11, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .preview-placeholder {
+        color: #52525b;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .crosshair {
+        position: absolute;
+        color: #27272a;
+        font-size: 9px;
+
+        &.top-left {
+          top: 0.5rem;
+          left: 0.5rem;
+        }
+
+        &.bottom-right {
+          bottom: 0.5rem;
+          right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  /* -------------------------------------------------------------
+     3. CATS — Playful / Alive / Interactive
+  ------------------------------------------------------------- */
+  .card-playful {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(94, 234, 212, 0.08);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    transition: all 0.4s ease;
+
+    .project-preview {
+      background: linear-gradient(
+        135deg,
+        rgba(94, 234, 212, 0.18),
+        rgba(34, 211, 238, 0.08)
+      );
+      border: 1px solid rgba(110, 231, 183, 0.08);
+      border-radius: 1rem;
+    }
+
+    .preview-inner {
+      width: 100%;
+      height: 100%;
+      background: #09090b;
+      border-radius: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10rem;
+      height: 10rem;
+      background: rgba(45, 212, 191, 0.12);
+      filter: blur(40px);
+    }
+
+    .project-identity {
+      color: #5eead4;
+      opacity: 0.9;
+    }
+
+    .project-name {
+      font-size: 2.1rem;
+      font-weight: 600;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(110, 231, 183, 0.08);
+      color: #d4d4d8;
+    }
+
+    .overlay-btn {
+      &:first-child {
+        background: rgba(16, 185, 129, 0.16);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #6ee7b7;
+
+        &:hover {
+          background: rgba(16, 185, 129, 0.24);
+          color: #fff;
+        }
+      }
+
+      &:last-child {
+        background: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.92);
+          color: #09090b;
+        }
+      }
+    }
+
+    &:hover {
+      border-color: rgba(94, 234, 212, 0.12);
+      box-shadow: 0 0 40px rgba(45, 212, 191, 0.05);
+    }
+  }
+
+  /* -------------------------------------------------------------
+     4. WEATHER APP — Pure Glassmorphism
+  ------------------------------------------------------------- */
+  .card-atmospheric {
+    --color-primary: #0ea5e9;
+    --color-bg-card: rgba(255, 255, 255, 0.01);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --color-text: #f4f4f6;
+    --color-text-light: #a1a1aa;
+    --border-radius-lg: 1rem;
+
+    position: relative;
+    border-radius: var(--border-radius-lg);
+    background: var(--color-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    padding: 0;
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-primary {
+      top: -10%;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: var(--color-primary);
+      opacity: 0.08;
+    }
+
+    .orb-light {
+      bottom: -10%;
+      left: 0;
+      width: 400px;
+      height: 400px;
+      background: #ffffff;
+      opacity: 0.02;
+    }
+
+    .glass-content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.25rem;
+    }
+
+    .project-identity {
+      color: var(--color-primary);
+    }
+
+    .project-name {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .project-description {
+      color: var(--color-text-light);
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f4f4f5;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .project-preview {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+
+      .preview-placeholder {
+        color: var(--color-text-light);
+        font-family: $font-mono;
+      }
+    }
+
+    .overlay-btn {
+      &:first-child {
+        background: rgba(14, 165, 233, 0.14);
+        color: #7dd3fc;
+        border: 1px solid rgba(14, 165, 233, 0.3);
+
+        &:hover {
+          background: rgba(14, 165, 233, 0.24);
+          color: #fff;
+        }
+      }
+
+      &:last-child {
+        background: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.92);
+          color: #09090b;
+        }
+      }
+    }
+
+    &:hover {
+      border-color: rgba(14, 165, 233, 0.2);
+    }
+  }
+
+  // Мобільна адаптація кнопок
+  @media (max-width: 767px) {
+    .project-card {
+      .project-preview {
+        height: 240px;
+      }
+
+      .project-overlay {
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .overlay-btn {
+        flex: 1 1 auto;
+        text-align: center;
+      }
+    }
+  }
 }
