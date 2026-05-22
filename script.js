@@ -5,734 +5,886 @@ const menu = document.querySelector(".nav-menu");
 const overlay = document.querySelector(".menu-overlay");
 
 // Перемикач мов
-const dropdown = document.querySelector('.language-dropdown');
-const dropBtn = document.querySelector('.dropdown-btn');
-const dropContent = document.querySelector('.dropdown-content');
+const dropdown = document.querySelector(".language-dropdown");
+const dropBtn = document.querySelector(".dropdown-btn");
+const dropContent = document.querySelector(".dropdown-content");
 
 if (dropdown && dropBtn && dropContent) {
-    // Відкриття / закриття dropdown
-    dropBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle('active');
-    });
+  // Відкриття / закриття dropdown
+  dropBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("active");
+  });
 
-    // Вибір мови
-    dropContent.querySelectorAll('li').forEach(lang => {
-        lang.addEventListener('click', () => {
-            const selectedLang = lang.dataset.lang;
-            dropBtn.textContent = (selectedLang === 'ua' ? 'UA' : 'EN') + ' ▾';
-            changeLanguage(selectedLang);
-            dropdown.classList.remove('active'); // закриваємо після вибору
-        });
+  dropContent.querySelectorAll("li").forEach((lang) => {
+    lang.addEventListener("click", () => {
+      const selectedLang = lang.dataset.lang;
+      const langLabel =
+        selectedLang === "ua" ? "UA" : selectedLang === "pl" ? "PL" : "EN";
+      dropBtn.textContent = langLabel + " ▾";
+      changeLanguage(selectedLang);
+      dropdown.classList.remove("active"); // закриваємо після вибору
     });
+  });
 
-    // Закриття dropdown при кліку поза ним
-    document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            dropdown.classList.remove('active');
-        }
-    });
+  // Закриття dropdown при кліку поза ниім
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove("active");
+    }
+  });
 
-    // Додатково: закриття при скролі або тапі на overlay (мобільні)
-    window.addEventListener('scroll', () => dropdown.classList.remove('active'), { passive: true });
-    document.addEventListener('touchstart', (e) => {
-        if (!dropdown.contains(e.target)) {
-            dropdown.classList.remove('active');
-        }
-    });
+  // Додатково: закриття при скролі або тапі на overlay (мобільні)
+  let lastScroll = 0;
+  window.addEventListener(
+    "scroll",
+    () => {
+      const currentScroll = window.pageYOffset;
+      if (Math.abs(currentScroll - lastScroll) > 5) {
+        // 5 пікселів - це безпечний поріг
+        dropdown.classList.remove("active");
+      }
+      lastScroll = currentScroll;
+    },
+    { passive: true },
+  );
 }
-
 
 // Функція для зміни мови
 function changeLanguage(lang) {
-    console.log('Changing language to:', lang);
+  console.log("Changing language to:", lang);
+  document.documentElement.lang = lang;
 
-    document.documentElement.lang = lang;
-    updateHtmlContent(lang);
-    renderPdfPreview(lang);
+  // 1. Оновлюємо заголовок сторінки з об'єкта перекладів
+  if (window.translations && window.translations[lang]) {
+    document.title = window.translations[lang].meta.title;
+  }
 
-    document.querySelectorAll('[data-ua][data-en]').forEach(element => {
-        const translation = element.getAttribute(`data-${lang}`);
-        if (translation) {
-            const currentClasses = element.className;
-            if (element.tagName === 'SPAN' || element.tagName === 'P' || element.tagName === 'H1' || element.tagName === 'H2' || element.tagName === 'A') {
-                element.textContent = translation;
-            } else {
-                element.innerHTML = translation.replace(/&lt;br&gt;/g, '<br>');
-            }
-            element.className = currentClasses;
-        }
-    });
-
-    const title = document.querySelector('title');
-    if (title) {
-        title.textContent = title.getAttribute(`data-${lang}`);
+  // 2. Підтримка legacy атрибутів (якщо десь в HTML ще залишились data-ua / data-en)
+  // Якщо додаси data-pl в HTML, він теж підхопиться
+  document.querySelectorAll("[data-ua][data-en]").forEach((element) => {
+    const translation = element.getAttribute(`data-${lang}`);
+    if (translation) {
+      if (
+        element.tagName === "SPAN" ||
+        element.tagName === "P" ||
+        element.tagName === "H1" ||
+        element.tagName === "H2" ||
+        element.tagName === "A"
+      ) {
+        element.textContent = translation;
+      } else {
+        element.innerHTML = translation.replace(/&lt;br&gt;/g, "<br>");
+      }
     }
+  });
 
-    updateHtmlContent(lang);
-    localStorage.setItem('preferred-language', lang);
+  updateHtmlContent(lang);
+  renderPdfPreview(lang);
+  localStorage.setItem("preferred-language", lang);
 
-    setTimeout(() => {
-        initScrollAnimations();
-    }, 100);
+  setTimeout(() => {
+    initScrollAnimations();
+  }, 100);
 }
 
-// Функція для оновлення HTML вмісту
+// Функція для оновлення HTML вмісту (тягнемо об'ємний текст з translations.js)
+// Функція для оновлення HTML вмісту (тягнемо об'ємний текст з translations.js)
 function updateHtmlContent(lang) {
-    const heroSubtitle = document.querySelector('.hero-subtitle');
-    if (heroSubtitle) {
-        const translation = heroSubtitle.getAttribute(`data-${lang}`);
-        if (translation) {
-            const currentClasses = heroSubtitle.className;
-            heroSubtitle.innerHTML = translation.replace(/&lt;br&gt;/g, '<br>');
-            heroSubtitle.className = currentClasses;
-        }
-    }
+  if (!window.translations || !window.translations[lang]) return;
+  const t = window.translations[lang];
 
-    const recommendationContent = document.querySelector('.text-scroller-content > div');
-    if (recommendationContent) {
-        const translation = recommendationContent.getAttribute(`data-${lang}`);
-        if (translation) {
-            const currentClasses = recommendationContent.className;
-            recommendationContent.innerHTML = translation.replace(/&lt;br&gt;/g, '<br>');
-            recommendationContent.className = currentClasses;
-        }
-    }
+  // ==========================================
+  // 1. Оновлення навігаційного меню
+  // ==========================================
+  const menuAbout = document.querySelector(".menu-about");
+  if (menuAbout && t.nav?.about) menuAbout.textContent = t.nav.about;
+
+  const menuProjects = document.querySelector(".menu-projects");
+  if (menuProjects && t.nav?.projects)
+    menuProjects.textContent = t.nav.projects;
+
+  const menuRecs = document.querySelector(".menu-recommendations");
+  if (menuRecs && t.nav?.recommendations)
+    menuRecs.textContent = t.nav.recommendations;
+
+  const menuContacts = document.querySelector(".menu-contacts");
+  if (menuContacts && t.nav?.contacts)
+    menuContacts.textContent = t.nav.contacts;
+
+  // ==========================================
+  // 2. Оновлення секції Hero
+  // ==========================================
+  const heroTitle = document.querySelector(".hero-title");
+  if (heroTitle && t.hero?.title) heroTitle.textContent = t.hero.title;
+
+  const heroSubtitle = document.querySelector(".hero-subtitle");
+  if (heroSubtitle && t.hero?.subtitle)
+    heroSubtitle.innerHTML = t.hero.subtitle;
+
+  const heroCta = document.querySelector(".hero-cta");
+  if (heroCta && t.hero?.cta) heroCta.textContent = t.hero.cta;
+
+  // ==========================================
+  // 3. Оновлення секції "Про мене"
+  // ==========================================
+  const aboutTitle = document.querySelector(".about-title");
+  if (aboutTitle && t.about?.title) aboutTitle.textContent = t.about.title;
+
+  const aboutText = document.querySelector(".about-text");
+  if (aboutText && t.about?.text) aboutText.textContent = t.about.text;
+
+  // Динамічний рендер навичок (Tags)
+  const aboutSkillsContainer = document.querySelector(".about-skills");
+  if (aboutSkillsContainer && t.about?.skills) {
+    aboutSkillsContainer.innerHTML = "";
+    t.about.skills.forEach((skill) => {
+      const span = document.createElement("span");
+      span.className = "skill-tag";
+      span.textContent = skill;
+      aboutSkillsContainer.appendChild(span);
+    });
+  }
+
+  // ==========================================
+  // 4. Оновлення секції "Рекомендації"
+  // ==========================================
+  const recTitle = document.querySelector(".recommendation-title");
+  if (recTitle && t.recommendations?.title) {
+    recTitle.textContent = t.recommendations.title;
+  }
+
+  const recContainer = document.getElementById("rec-cards-container");
+  if (recContainer && t.recommendations?.items) {
+    recContainer.innerHTML = t.recommendations.items
+      .map(
+        (item) => `
+      <div class="rec-card">
+        <div class="rec-card-header">
+          <h3 class="rec-project">${item.project}</h3>
+          <p class="rec-tags">${item.tags}</p>
+        </div>
+        <div class="rec-card-body">
+          <p class="rec-quote">${item.quote}</p>
+        </div>
+        <div class="rec-card-footer">
+          <button class="pdf-open-btn" data-pdf="${item.id}">
+            <span class="pdf-open-btn-text">${item.btnText}</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 3v5h5" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `,
+      )
+      .join("");
+  }
+
+  // ==========================================
+  // 5. Оновлення секції "Портфоліо"
+  // ==========================================
+  const portfolioTitle = document.querySelector(".portfolio-title");
+  if (portfolioTitle && t.projects?.title) {
+    portfolioTitle.textContent = t.projects.title;
+  }
+
+  // Оновлюємо текст кнопки (span всередині .portfolio-cta)
+  const portfolioCtaSpan = document.querySelector(".portfolio-cta span");
+  if (portfolioCtaSpan && t.projects?.cta) {
+    portfolioCtaSpan.textContent = t.projects.cta;
+  }
+
+  // ==========================================
+  // 6. Оновлення Футера та Доступності
+  // ==========================================
+  const copyright = document.querySelector(".copyright");
+  if (copyright && t.footer?.copyright) {
+    copyright.innerHTML = t.footer.copyright;
+  }
+
+  const scrollToTop = document.getElementById("scrollToTop");
+  if (scrollToTop && t.accessibility?.scrollTop) {
+    scrollToTop.setAttribute("aria-label", t.accessibility.scrollTop);
+  }
 }
 
 // Ініціалізація мови при завантаженні
-document.addEventListener('DOMContentLoaded', function () {
-    const savedLanguage = localStorage.getItem('preferred-language') || 'ua';
-    const dropBtn = document.querySelector('.dropdown-btn');
-    if (dropBtn) {
-        dropBtn.textContent = (savedLanguage === 'ua' ? 'UA' : 'EN') + ' ▾';
-    }
-    changeLanguage(savedLanguage);
+document.addEventListener("DOMContentLoaded", function () {
+  const savedLanguage = localStorage.getItem("preferred-language") || "ua";
+  const dropBtn = document.querySelector(".dropdown-btn");
+  if (dropBtn) {
+    const langLabel =
+      savedLanguage === "ua" ? "UA" : savedLanguage === "pl" ? "PL" : "EN";
+    dropBtn.textContent = langLabel + " ▾";
+  }
+  changeLanguage(savedLanguage);
 });
 
 // Функція переключення меню
 function toggleMenu() {
-    const isActive = menu.classList.contains('active');
+  const isActive = menu.classList.contains("active");
 
-    if (burger) burger.classList.toggle("active", !isActive);
-    if (burgerFixed) burgerFixed.classList.toggle("active", !isActive);
+  if (burger) burger.classList.toggle("active", !isActive);
+  if (burgerFixed) burgerFixed.classList.toggle("active", !isActive);
 
-    menu.classList.toggle("active");
-    overlay.classList.toggle("active");
+  menu.classList.toggle("active");
+  overlay.classList.toggle("active");
 
-    // Додаємо/видаляємо клас замість прямого стилю
-    document.body.classList.toggle('menu-open', !isActive);
+  // Додаємо/видаляємо клас замість прямого стилю
+  document.body.classList.toggle("menu-open", !isActive);
 }
 
 // Бургер меню обробники
 if (burger) {
-    burger.addEventListener("click", toggleMenu);
+  burger.addEventListener("click", toggleMenu);
 }
 
 if (burgerFixed) {
-    burgerFixed.addEventListener("click", toggleMenu);
+  burgerFixed.addEventListener("click", toggleMenu);
 }
 
 if (overlay) {
-    overlay.addEventListener("click", toggleMenu);
+  overlay.addEventListener("click", toggleMenu);
 }
 
 // Закриття меню по кліку на посилання
 if (menu) {
-    const menuLinks = menu.querySelectorAll('.menu-link');
-    menuLinks.forEach(link => {
-        link.addEventListener('click', toggleMenu);
-    });
+  const menuLinks = menu.querySelectorAll(".menu-link");
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", toggleMenu);
+  });
 }
 
 // Закриття меню при зміні розміру вікна
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768 && menu && menu.classList.contains('active')) {
-        toggleMenu();
-    }
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 768 && menu && menu.classList.contains("active")) {
+    toggleMenu();
+  }
 });
 
 // Закриття меню при натисканні Escape
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu && menu.classList.contains('active')) {
-        toggleMenu();
-    }
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && menu && menu.classList.contains("active")) {
+    toggleMenu();
+  }
 });
 
 // Оптимізація анімацій
-document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.hero-title, .hero-subtitle, .hero-cta');
+document.addEventListener("DOMContentLoaded", () => {
+  const animatedElements = document.querySelectorAll(
+    ".hero-title, .hero-subtitle, .hero-cta",
+  );
 
-    animatedElements.forEach(element => {
-        element.style.willChange = 'transform, opacity';
-    });
+  animatedElements.forEach((element) => {
+    element.style.willChange = "transform, opacity";
+  });
 
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            animatedElements.forEach(element => {
-                const animation = element.style.animation;
-                element.style.animation = 'none';
-                setTimeout(() => {
-                    element.style.animation = animation;
-                }, 10);
-            });
-        }
-    });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      animatedElements.forEach((element) => {
+        const animation = element.style.animation;
+        element.style.animation = "none";
+        setTimeout(() => {
+          element.style.animation = animation;
+        }, 10);
+      });
+    }
+  });
 });
 
 // Плавний скрол для якірних посилань
 function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            if (this.classList.contains('menu-link')) {
-                return;
-            }
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      if (this.classList.contains("menu-link")) {
+        return;
+      }
 
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                if (menu && menu.classList.contains('active')) {
-                    toggleMenu();
-                }
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        if (menu && menu.classList.contains("active")) {
+          toggleMenu();
+        }
 
-                setTimeout(() => {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }, 300);
-            }
-        });
+        setTimeout(() => {
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 300);
+      }
     });
+  });
 }
 
 // Анімація вулканічної лампи
 function initLavaLamp() {
-    const container = document.querySelector('.lamp-container');
-    const lamp = document.querySelector('.lava-lamp');
+  const container = document.querySelector(".lamp-container");
+  const lamp = document.querySelector(".lava-lamp");
 
-    if (!container || !lamp) {
-        console.log('Елементи лави не знайдені, пропускаємо ініціалізацію');
-        return;
+  if (!container || !lamp) {
+    console.log("Елементи лави не знайдені, пропускаємо ініціалізацію");
+    return;
+  }
+
+  let blobs = [];
+
+  function createBlobs() {
+    container.innerHTML = "";
+    blobs = [];
+
+    for (let i = 0; i < 5; i++) {
+      const blob = document.createElement("div");
+      blob.className = "blob";
+
+      const size = 50 + Math.random() * 70;
+      const left = 10 + Math.random() * 80;
+      const bottom = Math.random() * 20;
+
+      blob.style.width = `${size}px`;
+      blob.style.height = `${size}px`;
+      blob.style.left = `${left}%`;
+      blob.style.bottom = `${bottom}%`;
+
+      container.appendChild(blob);
+      blobs.push({
+        element: blob,
+        speed: 0.5 + Math.random() * 1.5,
+        xDirection: Math.random() > 0.5 ? 1 : -1,
+        yDirection: Math.random() > 0.5 ? 1 : -1,
+        xAmplitude: 0.5 + Math.random() * 2,
+        yAmplitude: 1 + Math.random() * 3,
+      });
     }
+  }
 
-    let blobs = [];
+  function updateBlobs() {
+    const time = Date.now() * 0.001;
 
-    function createBlobs() {
-        container.innerHTML = '';
-        blobs = [];
+    blobs.forEach((blob) => {
+      const x = Math.sin(time * blob.speed) * blob.xAmplitude * blob.xDirection;
+      const y =
+        Math.cos(time * blob.speed * 0.7) * blob.yAmplitude * blob.yDirection;
 
-        for (let i = 0; i < 5; i++) {
-            const blob = document.createElement('div');
-            blob.className = 'blob';
-
-            const size = 50 + Math.random() * 70;
-            const left = 10 + Math.random() * 80;
-            const bottom = Math.random() * 20;
-
-            blob.style.width = `${size}px`;
-            blob.style.height = `${size}px`;
-            blob.style.left = `${left}%`;
-            blob.style.bottom = `${bottom}%`;
-
-            container.appendChild(blob);
-            blobs.push({
-                element: blob,
-                speed: 0.5 + Math.random() * 1.5,
-                xDirection: Math.random() > 0.5 ? 1 : -1,
-                yDirection: Math.random() > 0.5 ? 1 : -1,
-                xAmplitude: 0.5 + Math.random() * 2,
-                yAmplitude: 1 + Math.random() * 3
-            });
-        }
-    }
-
-    function updateBlobs() {
-        const time = Date.now() * 0.001;
-
-        blobs.forEach(blob => {
-            const x = Math.sin(time * blob.speed) * blob.xAmplitude * blob.xDirection;
-            const y = Math.cos(time * blob.speed * 0.7) * blob.yAmplitude * blob.yDirection;
-
-            blob.element.style.transform = `translate(${x}px, ${y}px)`;
-        });
-
-        requestAnimationFrame(updateBlobs);
-    }
-
-    lamp.addEventListener('mousemove', (e) => {
-        const rect = lamp.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-
-        blobs.forEach((blob, index) => {
-            const sensitivity = 0.3 + (index * 0.1);
-            const offsetX = x * 15 * sensitivity;
-            const offsetY = y * 15 * sensitivity;
-
-            const currentTransform = blob.element.style.transform;
-            blob.element.style.transform = `${currentTransform} translate(${offsetX}px, ${offsetY}px)`;
-        });
+      blob.element.style.transform = `translate(${x}px, ${y}px)`;
     });
 
-    lamp.addEventListener('mouseleave', () => {
-        // Не потрібно скидати, оскільки анімація продовжується
+    requestAnimationFrame(updateBlobs);
+  }
+
+  lamp.addEventListener("mousemove", (e) => {
+    const rect = lamp.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+    blobs.forEach((blob, index) => {
+      const sensitivity = 0.3 + index * 0.1;
+      const offsetX = x * 15 * sensitivity;
+      const offsetY = y * 15 * sensitivity;
+
+      const currentTransform = blob.element.style.transform;
+      blob.element.style.transform = `${currentTransform} translate(${offsetX}px, ${offsetY}px)`;
     });
+  });
 
-    createBlobs();
-    updateBlobs();
+  lamp.addEventListener("mouseleave", () => {
+    // Не потрібно скидати, оскільки анімація продовжується
+  });
 
-    function handleResize() {
-        if (window.innerWidth > 1200) {
-            createBlobs();
-        }
-    }
+  createBlobs();
+  updateBlobs();
 
+  function handleResize() {
     if (window.innerWidth > 1200) {
-        window.addEventListener('resize', handleResize);
+      createBlobs();
     }
+  }
+
+  if (window.innerWidth > 1200) {
+    window.addEventListener("resize", handleResize);
+  }
 }
 
 // Управління хедером та кнопкою "Нагору"
 function initScrollEffects() {
-    const header = document.querySelector('.header');
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    let lastScrollY = window.scrollY;
+  const header = document.querySelector(".header");
+  const scrollToTopBtn = document.getElementById("scrollToTop");
+  let lastScrollY = window.scrollY;
 
-    function handleScroll() {
-        const currentScrollY = window.scrollY;
-        const heroHeight = document.querySelector('.hero').offsetHeight;
-        const isMenuActive = menu.classList.contains('active');
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+    const heroHeight = document.querySelector(".hero").offsetHeight;
+    const isMenuActive = menu.classList.contains("active");
 
-        if (isMenuActive) return;
+    if (isMenuActive) return;
 
-        if (currentScrollY > heroHeight * 0.3) {
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                header.classList.add('hidden');
-                header.classList.remove('visible');
-            } else {
-                header.classList.remove('hidden');
-                header.classList.add('visible');
-            }
-        } else {
-            header.classList.remove('hidden', 'visible');
-        }
-
-        if (scrollToTopBtn) {
-            scrollToTopBtn.classList.toggle('visible', currentScrollY > heroHeight * 0.5);
-        }
-
-        lastScrollY = currentScrollY;
+    if (currentScrollY > heroHeight * 0.3) {
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        header.classList.add("hidden");
+        header.classList.remove("visible");
+      } else {
+        header.classList.remove("hidden");
+        header.classList.add("visible");
+      }
+    } else {
+      header.classList.remove("hidden", "visible");
     }
 
     if (scrollToTopBtn) {
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
+      scrollToTopBtn.classList.toggle(
+        "visible",
+        currentScrollY > heroHeight * 0.5,
+      );
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    lastScrollY = currentScrollY;
+  }
 
-    handleScroll();
+  if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+  }
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
+  handleScroll();
 }
 
 // Анімація секцій при скролі з Intersection Observer
 let sectionObserver = null;
 
 function initScrollAnimations() {
-    const animatedSections = document.querySelectorAll('.about-section, .recommendation-section, .portfolio-section, .footer');
+  const animatedSections = document.querySelectorAll(
+    ".about-section, .recommendation-section, .portfolio-section, .footer",
+  );
 
-    console.log('Знайдено секцій для анімації:', animatedSections.length);
+  console.log("Знайдено секцій для анімації:", animatedSections.length);
 
-    if (animatedSections.length === 0) return;
+  if (animatedSections.length === 0) return;
 
-    if (sectionObserver) {
-        sectionObserver.disconnect();
-    }
+  if (sectionObserver) {
+    sectionObserver.disconnect();
+  }
 
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -100px 0px",
+  };
 
-    sectionObserver = new IntersectionObserver((entries) => {
-        console.log('Intersection Observer спрацював:', entries.length);
+  sectionObserver = new IntersectionObserver((entries) => {
+    console.log("Intersection Observer спрацював:", entries.length);
 
-        entries.forEach(entry => {
-            console.log(`Секція ${entry.target.id}: isIntersecting = ${entry.isIntersecting}`);
+    entries.forEach((entry) => {
+      console.log(
+        `Секція ${entry.target.id}: isIntersecting = ${entry.isIntersecting}`,
+      );
 
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                console.log(`Додано клас 'visible' для ${entry.target.id}`);
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        console.log(`Додано клас 'visible' для ${entry.target.id}`);
 
-                if (entry.target.classList.contains('about-section')) {
-                    const skillTags = entry.target.querySelectorAll('.skill-tag');
-                    console.log(`Анімую ${skillTags.length} навичок`);
-                    skillTags.forEach((tag, index) => {
-                        setTimeout(() => {
-                            tag.classList.add('animated');
-                        }, index * 100);
-                    });
-                }
-            }
-        });
-    }, observerOptions);
-
-    animatedSections.forEach(section => {
-        console.log(`Спостерігаємо за секцією: ${section.id}`);
-        sectionObserver.observe(section);
+        if (entry.target.classList.contains("about-section")) {
+          const skillTags = entry.target.querySelectorAll(".skill-tag");
+          console.log(`Анімую ${skillTags.length} навичок`);
+          skillTags.forEach((tag, index) => {
+            setTimeout(() => {
+              tag.classList.add("animated");
+            }, index * 100);
+          });
+        }
+      }
     });
+  }, observerOptions);
+
+  animatedSections.forEach((section) => {
+    console.log(`Спостерігаємо за секцією: ${section.id}`);
+    sectionObserver.observe(section);
+  });
 }
 
 // Анімація обертання кілець
 function initRingAnimation() {
-    const largeRing = document.querySelector('.large-ring');
-    const smallRing = document.querySelector('.small-ring');
-    let angle = 0;
+  const largeRing = document.querySelector(".large-ring");
+  const smallRing = document.querySelector(".small-ring");
+  let angle = 0;
 
-    console.log('initRingAnimation started', largeRing, smallRing);
+  console.log("initRingAnimation started", largeRing, smallRing);
 
-    function animate() {
-        if (largeRing && smallRing) {
-            angle += 0.001;
-            largeRing.style.transform = `rotate(${angle}rad)`;
-            smallRing.style.transform = `rotate(${angle * -1.5}rad)`;
-        }
-        requestAnimationFrame(animate);
+  function animate() {
+    if (largeRing && smallRing) {
+      angle += 0.001;
+      largeRing.style.transform = `rotate(${angle}rad)`;
+      smallRing.style.transform = `rotate(${angle * -1.5}rad)`;
     }
+    requestAnimationFrame(animate);
+  }
 
-    animate();
+  animate();
 }
 
 // Обмеження горизонтального скролу
 function preventHorizontalScroll() {
-    let lastScrollLeft = window.pageXOffset;
+  let lastScrollLeft = window.pageXOffset;
 
-    function checkScroll() {
-        const currentScrollLeft = window.pageXOffset;
+  function checkScroll() {
+    const currentScrollLeft = window.pageXOffset;
 
-        if (currentScrollLeft !== 0) {
-            window.scrollTo(0, window.pageYOffset);
-        }
-
-        lastScrollLeft = currentScrollLeft;
+    if (currentScrollLeft !== 0) {
+      window.scrollTo(0, window.pageYOffset);
     }
 
-    window.addEventListener('scroll', checkScroll, { passive: false });
+    lastScrollLeft = currentScrollLeft;
+  }
+
+  window.addEventListener("scroll", checkScroll, { passive: false });
 }
 
 // Корекція позиції планет на ресайз
 function fixPlanetPosition() {
-    const planet = document.querySelector('.planet');
-    const rings = document.querySelectorAll('.ring');
+  const planet = document.querySelector(".planet");
+  const rings = document.querySelectorAll(".ring");
 
-    function updatePosition() {
-        const viewportWidth = window.innerWidth;
+  function updatePosition() {
+    const viewportWidth = window.innerWidth;
 
-        if (viewportWidth < 768) {
-            if (planet) {
-                planet.style.width = '1000px';
-                planet.style.height = '500px';
-            }
-            rings.forEach(ring => {
-                if (ring.classList.contains('large-ring')) {
-                    ring.style.width = '750px';
-                    ring.style.height = '750px';
-                    ring.style.marginLeft = '-375px';
-                    ring.style.marginTop = '-500px';
-                }
-                if (ring.classList.contains('small-ring')) {
-                    ring.style.width = '900px';
-                    ring.style.height = '900px';
-                    ring.style.marginLeft = '-450px';
-                    ring.style.marginTop = '-450px';
-                }
-            });
+    if (viewportWidth < 768) {
+      if (planet) {
+        planet.style.width = "1000px";
+        planet.style.height = "500px";
+      }
+      rings.forEach((ring) => {
+        if (ring.classList.contains("large-ring")) {
+          ring.style.width = "750px";
+          ring.style.height = "750px";
+          ring.style.marginLeft = "-375px";
+          ring.style.marginTop = "-500px";
         }
+        if (ring.classList.contains("small-ring")) {
+          ring.style.width = "900px";
+          ring.style.height = "900px";
+          ring.style.marginLeft = "-450px";
+          ring.style.marginTop = "-450px";
+        }
+      });
     }
+  }
 
-    window.addEventListener('resize', updatePosition);
-    updatePosition();
+  window.addEventListener("resize", updatePosition);
+  updatePosition();
 }
 
 // Головна функція ініціалізації
 function initAll() {
-    initLavaLamp();
-    initScrollEffects();
-    initSmoothScroll();
-    initScrollAnimations();
-    preventHorizontalScroll();
-    fixPlanetPosition();
-    initRingAnimation();
+  initLavaLamp();
+  initScrollEffects();
+  initSmoothScroll();
+  initScrollAnimations();
+  preventHorizontalScroll();
+  fixPlanetPosition();
+  initRingAnimation();
 }
 
 // Ініціалізація при завантаженні DOM
-document.addEventListener('DOMContentLoaded', function () {
-    initAll();
+document.addEventListener("DOMContentLoaded", function () {
+  initAll();
 });
 
 // Запасний спосіб ініціалізації
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAll);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAll);
 } else {
-    setTimeout(initAll, 100);
+  setTimeout(initAll, 100);
 }
 
 // Кастомний курсор
 class CustomCursor {
-    constructor() {
-        this.cursor = document.querySelector('.animated-cursor');
-        this.pos = { x: 0, y: 0 };
-        this.mouse = { x: 0, y: 0 };
-        this.raf = null;
-        this.isEnabled = false;
+  constructor() {
+    this.cursor = document.querySelector(".animated-cursor");
+    this.pos = { x: 0, y: 0 };
+    this.mouse = { x: 0, y: 0 };
+    this.raf = null;
+    this.isEnabled = false;
 
-        this.init();
+    this.init();
+  }
+
+  init() {
+    this.checkDeviceType();
+
+    if (this.isEnabled) {
+      this.bindEvents();
+      this.animate();
+    } else {
+      if (this.cursor) {
+        this.cursor.style.display = "none";
+      }
+      document.documentElement.style.cursor = "auto";
     }
+  }
 
-    init() {
-        this.checkDeviceType();
+  checkDeviceType() {
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    const screenWidth = window.innerWidth;
+    const isDesktopSize = screenWidth >= 1200;
+    const isTabletSize = screenWidth >= 768 && screenWidth < 1200;
 
-        if (this.isEnabled) {
-            this.bindEvents();
-            this.animate();
-        } else {
-            if (this.cursor) {
-                this.cursor.style.display = 'none';
-            }
-            document.documentElement.style.cursor = 'auto';
-        }
-    }
+    this.isEnabled = isDesktopSize && !isTouchDevice;
 
-    checkDeviceType() {
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-        const screenWidth = window.innerWidth;
-        const isDesktopSize = screenWidth >= 1200;
-        const isTabletSize = screenWidth >= 768 && screenWidth < 1200;
+    console.log(`Cursor enabled: ${this.isEnabled}`, {
+      isTouchDevice,
+      screenWidth,
+      isDesktopSize,
+      isTabletSize,
+    });
+  }
 
-        this.isEnabled = isDesktopSize && !isTouchDevice;
+  bindEvents() {
+    if (!this.isEnabled) return;
 
-        console.log(`Cursor enabled: ${this.isEnabled}`, {
-            isTouchDevice,
-            screenWidth,
-            isDesktopSize,
-            isTabletSize
-        });
-    }
+    document.addEventListener("mousemove", (e) => {
+      this.mouse.x = e.clientX;
+      this.mouse.y = e.clientY;
+      this.updateCursorPosition();
 
-    bindEvents() {
-        if (!this.isEnabled) return;
+      const speed = Math.sqrt(
+        Math.pow(e.movementX, 2) + Math.pow(e.movementY, 2),
+      );
+      if (speed > 20) {
+        this.cursor.classList.add("fast-move");
+      } else {
+        this.cursor.classList.remove("fast-move");
+      }
+    });
 
-        document.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
-            this.updateCursorPosition();
+    document.addEventListener("mousedown", () => {
+      this.cursor.classList.add("click");
+    });
 
-            const speed = Math.sqrt(Math.pow(e.movementX, 2) + Math.pow(e.movementY, 2));
-            if (speed > 20) {
-                this.cursor.classList.add('fast-move');
-            } else {
-                this.cursor.classList.remove('fast-move');
-            }
-        });
+    document.addEventListener("mouseup", () => {
+      this.cursor.classList.remove("click");
+    });
 
-        document.addEventListener('mousedown', () => {
-            this.cursor.classList.add('click');
-        });
+    this.handleHoverEffects();
 
-        document.addEventListener('mouseup', () => {
-            this.cursor.classList.remove('click');
-        });
+    document.addEventListener("mouseleave", () => {
+      this.cursor.style.opacity = "0.5";
+    });
 
-        this.handleHoverEffects();
+    document.addEventListener("mouseenter", () => {
+      this.cursor.style.opacity = "1";
+    });
 
-        document.addEventListener('mouseleave', () => {
-            this.cursor.style.opacity = '0.5';
-        });
+    window.addEventListener("resize", () => {
+      this.checkDeviceType();
+      if (!this.isEnabled && this.cursor) {
+        this.cursor.style.display = "none";
+        document.documentElement.style.cursor = "auto";
+      }
+    });
+  }
 
-        document.addEventListener('mouseenter', () => {
-            this.cursor.style.opacity = '1';
-        });
+  updateCursorPosition() {
+    if (!this.isEnabled) return;
+    this.cursor.style.left = this.mouse.x + "px";
+    this.cursor.style.top = this.mouse.y + "px";
+  }
 
-        window.addEventListener('resize', () => {
-            this.checkDeviceType();
-            if (!this.isEnabled && this.cursor) {
-                this.cursor.style.display = 'none';
-                document.documentElement.style.cursor = 'auto';
-            }
-        });
-    }
+  handleHoverEffects() {
+    if (!this.isEnabled) return;
 
-    updateCursorPosition() {
-        if (!this.isEnabled) return;
-        this.cursor.style.left = this.mouse.x + 'px';
-        this.cursor.style.top = this.mouse.y + 'px';
-    }
+    const hoverElements = document.querySelectorAll(
+      "a, button, [data-cursor-hover]",
+    );
+    const textElements = document.querySelectorAll(
+      "p, h1, h2, h3, h4, h5, h6, span, [data-cursor-text]",
+    );
 
-    handleHoverEffects() {
-        if (!this.isEnabled) return;
+    hoverElements.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        this.cursor.classList.add("hover");
+      });
 
-        const hoverElements = document.querySelectorAll('a, button, [data-cursor-hover]');
-        const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, [data-cursor-text]');
+      el.addEventListener("mouseleave", () => {
+        this.cursor.classList.remove("hover");
+      });
+    });
 
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                this.cursor.classList.add('hover');
-            });
+    textElements.forEach((el) => {
+      el.addEventListener("mouseenter", () => {
+        this.cursor.classList.add("text-hover");
+      });
 
-            el.addEventListener('mouseleave', () => {
-                this.cursor.classList.remove('hover');
-            });
-        });
+      el.addEventListener("mouseleave", () => {
+        this.cursor.classList.remove("text-hover");
+      });
+    });
+  }
 
-        textElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                this.cursor.classList.add('text-hover');
-            });
-
-            el.addEventListener('mouseleave', () => {
-                this.cursor.classList.remove('text-hover');
-            });
-        });
-    }
-
-    animate() {
-        if (!this.isEnabled) return;
-        this.raf = requestAnimationFrame(() => this.animate());
-    }
+  animate() {
+    if (!this.isEnabled) return;
+    this.raf = requestAnimationFrame(() => this.animate());
+  }
 }
 
 // Ініціалізація кастомного курсору
-document.addEventListener('DOMContentLoaded', () => {
-    new CustomCursor();
+document.addEventListener("DOMContentLoaded", () => {
+  new CustomCursor();
 });
 
 // Функція для відображення прев’ю PDF
-function renderPdfPreview(lang = 'ua') {
-    const pdfUrl = lang === 'ua'
-        ? 'assets/recommendation-full.pdf'
-        : 'assets/recommendation-full-en.pdf';
+function renderPdfPreview(lang = "ua") {
+  const pdfUrl =
+    lang === "ua"
+      ? "assets/recommendation-full.pdf"
+      : "assets/recommendation-full-en.pdf";
 
-    console.log('Loading PDF for language:', lang, 'URL:', pdfUrl);
+  console.log("Loading PDF for language:", lang, "URL:", pdfUrl);
 
-    const canvas = document.getElementById('pdf-preview');
+  const canvas = document.getElementById("pdf-preview");
 
-    if (!canvas) {
-        console.error('Canvas element not found');
-        return;
-    }
+  if (!canvas) {
+    console.error("Canvas element not found");
+    return;
+  }
 
-    canvas.style.display = 'none';
-    const container = canvas.parentElement;
+  canvas.style.display = "none";
+  const container = canvas.parentElement;
 
-    const existingLoading = container.querySelector('.pdf-loading');
-    if (existingLoading) {
-        existingLoading.remove();
-    }
+  const existingLoading = container.querySelector(".pdf-loading");
+  if (existingLoading) {
+    existingLoading.remove();
+  }
 
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'pdf-loading';
-    loadingDiv.textContent = lang === 'ua' ? 'Завантаження PDF' : 'Loading PDF';
-    container.appendChild(loadingDiv);
+  const loadingDiv = document.createElement("div");
+  loadingDiv.className = "pdf-loading";
+  loadingDiv.textContent = window.translations
+    ? window.translations[lang].recommendations.pdfLoading
+    : "Loading...";
+  container.appendChild(loadingDiv);
 
-    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
-        console.log('PDF loaded successfully, total pages:', pdf.numPages);
-        return pdf.getPage(1);
-    }).then(page => {
-        console.log('First page loaded');
+  pdfjsLib
+    .getDocument(pdfUrl)
+    .promise.then((pdf) => {
+      console.log("PDF loaded successfully, total pages:", pdf.numPages);
+      return pdf.getPage(1);
+    })
+    .then((page) => {
+      console.log("First page loaded");
+      loadingDiv.remove();
+      canvas.style.display = "block";
+
+      const viewport = page.getViewport({ scale: 1.5 });
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+
+      return page.render(renderContext).promise;
+    })
+    .then(() => {
+      console.log("PDF rendered successfully");
+    })
+    .catch((error) => {
+      console.error("Error rendering PDF:", error);
+      // Беремо текст помилки з перекладів
+      loadingDiv.textContent = window.translations
+        ? window.translations[lang].recommendations.pdfError
+        : "Error loading PDF";
+
+      setTimeout(() => {
         loadingDiv.remove();
-        canvas.style.display = 'block';
-
-        const viewport = page.getViewport({ scale: 1.5 });
-        const context = canvas.getContext('2d');
-
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-
-        return page.render(renderContext).promise;
-    }).then(() => {
-        console.log('PDF rendered successfully');
-    }).catch(error => {
-        console.error('Error rendering PDF:', error);
-        loadingDiv.textContent = lang === 'ua' ? 'Помилка завантаження PDF' : 'Error loading PDF';
-
-        setTimeout(() => {
-            loadingDiv.remove();
-            showPdfFallback(container, lang);
-        }, 2000);
+        showPdfFallback(container, lang);
+      }, 2000);
     });
 }
 
 // Функція для відкриття повного PDF
-function openFullPdf(lang = 'ua') {
-    const pdfUrl = lang === 'ua'
-        ? 'assets/recommendation-full.pdf'
-        : 'assets/recommendation-full-en.pdf';
-    console.log('Attempting to open PDF:', pdfUrl, 'Language:', lang);
-    try {
-        window.open(pdfUrl, '_blank');
-        console.log('PDF opened successfully');
-    } catch (error) {
-        console.error('Error opening PDF:', error);
-    }
+// Функція для відкриття правильного PDF
+function openFullPdf(lang = "ua", pdfId = "student") {
+  let pdfUrl = "";
+
+  if (pdfId === "dma") {
+    // Новий лист DMA EU
+    pdfUrl =
+      lang === "ua"
+        ? "assets/DMA_EU_recomend_UA.pdf"
+        : "assets/DMA_EU_recomend_EN.pdf";
+  } else {
+    // Старий лист StudentAbroad
+    pdfUrl =
+      lang === "ua"
+        ? "assets/recommendation-full.pdf"
+        : "assets/recommendation-full-en.pdf";
+  }
+
+  console.log("Opening PDF:", pdfUrl);
+  try {
+    window.open(pdfUrl, "_blank");
+  } catch (error) {
+    console.error("Error opening PDF:", error);
+  }
 }
 
-// Fallback якщо PDF не завантажився
-function showPdfFallback(container, lang = 'ua') {
-    const title = lang === 'ua' ? 'Рекомендаційний лист' : 'Recommendation Letter';
-    const buttonText = lang === 'ua' ? 'Відкрити PDF' : 'Open PDF';
-
-    container.innerHTML = `
-        <div class="pdf-fallback">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z" stroke-width="2"/>
-                <path d="M14 3v5h5" stroke-width="2"/>
-            </svg>
-            <p>${title}</p>
-            <button class="pdf-open-btn">${buttonText}</button>
-        </div>
-    `;
-}
+// Делегування подій для кнопок PDF
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".pdf-open-btn");
+  if (btn) {
+    const currentLang = localStorage.getItem("preferred-language") || "ua";
+    const pdfId = btn.getAttribute("data-pdf"); // Отримуємо 'student' або 'dma'
+    openFullPdf(currentLang, pdfId);
+  }
+});
 
 // Делегування подій для кнопки PDF
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('pdf-open-btn') || e.target.closest('.pdf-open-btn')) {
-        const currentLang = localStorage.getItem('preferred-language') || 'ua';
-        openFullPdf(currentLang);
-    }
+document.addEventListener("click", function (e) {
+  if (
+    e.target.classList.contains("pdf-open-btn") ||
+    e.target.closest(".pdf-open-btn")
+  ) {
+    const currentLang = localStorage.getItem("preferred-language") || "ua";
+    openFullPdf(currentLang);
+  }
 });
 
 // Функція для копіювання email
 function copyEmailToClipboard() {
-    const email = 'boiko.klymentii.ua@gmail.com';
+  const email = "boiko.klymentii.ua@gmail.com";
 
-    navigator.clipboard.writeText(email).then(() => {
-        showNotification('Email скопійовано в буфер обміну!');
-    }).catch(err => {
-        const textArea = document.createElement('textarea');
-        textArea.value = email;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showNotification('Email скопійовано в буфер обміну!');
+  navigator.clipboard
+    .writeText(email)
+    .then(() => {
+      showNotification("Email скопійовано в буфер обміну!");
+    })
+    .catch((err) => {
+      const textArea = document.createElement("textarea");
+      textArea.value = email;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      showNotification("Email скопійовано в буфер обміну!");
     });
 }
 
 // Функція для показу повідомлення
 function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'copy-notification';
-    notification.textContent = message;
-    notification.style.cssText = `
+  const notification = document.createElement("div");
+  notification.className = "copy-notification";
+  notification.textContent = message;
+  notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
@@ -745,43 +897,91 @@ function showNotification(message) {
         animation: slideIn 0.3s ease-out;
     `;
 
-    document.body.appendChild(notification);
+  document.body.appendChild(notification);
 
+  setTimeout(() => {
+    notification.style.animation = "slideOut 0.3s ease-in";
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
 }
 
 // Ініціалізація email копіювання та футера
-document.addEventListener('DOMContentLoaded', function () {
-    const emailLink = document.getElementById('email-link');
-    if (emailLink) {
-        emailLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            copyEmailToClipboard();
-        });
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  const emailLink = document.getElementById("email-link");
+  if (emailLink) {
+    emailLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      copyEmailToClipboard();
+    });
+  }
 
-    initFooterAnimation();
+  initFooterAnimation();
 });
 
 // Анімація появи футера
 function initFooterAnimation() {
-    const footer = document.querySelector('.footer');
-    if (!footer) return;
+  const footer = document.querySelector(".footer");
+  if (!footer) return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+    },
+  );
+
+  observer.observe(footer);
+}
+
+const isTouchDevice = window.matchMedia(
+  "(hover: none) and (pointer: coarse)",
+).matches;
+
+if (isTouchDevice) {
+  const cards = document.querySelectorAll(".project-card");
+
+  cards.forEach((card) => {
+    const overlayButtons = card.querySelectorAll(".overlay-btn");
+
+    card.addEventListener("click", (e) => {
+      const clickedBtn = e.target.closest(".overlay-btn");
+      const isOpen = card.classList.contains("is-open");
+
+      // Якщо натиснули кнопку і карточка вже відкрита
+      if (clickedBtn && isOpen) return;
+
+      // Перший тап → відкриваємо overlay
+      if (!isOpen) {
+        e.preventDefault();
+
+        // Закриваємо інші карточки
+        cards.forEach((c) => c.classList.remove("is-open"));
+
+        card.classList.add("is-open");
+
+        return;
+      }
+
+      // Другий тап НЕ по кнопці → закриваємо
+      if (isOpen && !clickedBtn) {
+        e.preventDefault();
+        card.classList.remove("is-open");
+      }
     });
+  });
 
-    observer.observe(footer);
+  // Закриття при тапі поза карточкою
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".project-card")) {
+      cards.forEach((card) => card.classList.remove("is-open"));
+    }
+  });
 }
