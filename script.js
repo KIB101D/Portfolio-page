@@ -89,10 +89,29 @@ function changeLanguage(lang) {
 }
 
 // Функція для оновлення HTML вмісту (тягнемо об'ємний текст з translations.js)
-// Функція для оновлення HTML вмісту (тягнемо об'ємний текст з translations.js)
 function updateHtmlContent(lang) {
   if (!window.translations || !window.translations[lang]) return;
   const t = window.translations[lang];
+
+  // ==========================================
+  // 0. Meta / lang / language switcher
+  // ==========================================
+  document.documentElement.lang = lang;
+
+  if (t.meta?.title) {
+    document.title = t.meta.title;
+  }
+
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  if (dropdownBtn) {
+    const labelMap = {
+      ua: "UA",
+      en: "EN",
+      pl: "PL",
+    };
+
+    dropdownBtn.textContent = `${labelMap[lang] || "UA"} ▾`;
+  }
 
   // ==========================================
   // 1. Оновлення навігаційного меню
@@ -101,16 +120,37 @@ function updateHtmlContent(lang) {
   if (menuAbout && t.nav?.about) menuAbout.textContent = t.nav.about;
 
   const menuProjects = document.querySelector(".menu-projects");
-  if (menuProjects && t.nav?.projects)
+  if (menuProjects && t.nav?.projects) {
     menuProjects.textContent = t.nav.projects;
+  }
 
   const menuRecs = document.querySelector(".menu-recommendations");
-  if (menuRecs && t.nav?.recommendations)
+  if (menuRecs && t.nav?.recommendations) {
     menuRecs.textContent = t.nav.recommendations;
+  }
 
   const menuContacts = document.querySelector(".menu-contacts");
-  if (menuContacts && t.nav?.contacts)
+  if (menuContacts && t.nav?.contacts) {
     menuContacts.textContent = t.nav.contacts;
+  }
+
+  // Підтримка твоєї поточної HTML-структури
+  const menuLinks = document.querySelectorAll(".menu-link");
+  if (menuLinks.length) {
+    menuLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+
+      if (href === "./index.html" || href === "index.html") {
+        link.textContent = t.nav?.about || link.textContent;
+      } else if (href === "#portfolio") {
+        link.textContent = t.nav?.projects || link.textContent;
+      } else if (href === "#recommendation") {
+        link.textContent = t.nav?.recommendations || link.textContent;
+      } else if (href === "#contacts") {
+        link.textContent = t.nav?.contacts || link.textContent;
+      }
+    });
+  }
 
   // ==========================================
   // 2. Оновлення секції Hero
@@ -119,8 +159,9 @@ function updateHtmlContent(lang) {
   if (heroTitle && t.hero?.title) heroTitle.textContent = t.hero.title;
 
   const heroSubtitle = document.querySelector(".hero-subtitle");
-  if (heroSubtitle && t.hero?.subtitle)
+  if (heroSubtitle && t.hero?.subtitle) {
     heroSubtitle.innerHTML = t.hero.subtitle;
+  }
 
   const heroCta = document.querySelector(".hero-cta");
   if (heroCta && t.hero?.cta) heroCta.textContent = t.hero.cta;
@@ -134,7 +175,6 @@ function updateHtmlContent(lang) {
   const aboutText = document.querySelector(".about-text");
   if (aboutText && t.about?.text) aboutText.textContent = t.about.text;
 
-  // Динамічний рендер навичок (Tags)
   const aboutSkillsContainer = document.querySelector(".about-skills");
   if (aboutSkillsContainer && t.about?.skills) {
     aboutSkillsContainer.innerHTML = "";
@@ -183,17 +223,68 @@ function updateHtmlContent(lang) {
   }
 
   // ==========================================
-  // 5. Оновлення секції "Портфоліо"
+  // 5. Оновлення секції "Портфоліо" / Selected Work
   // ==========================================
   const portfolioTitle = document.querySelector(".portfolio-title");
   if (portfolioTitle && t.projects?.title) {
     portfolioTitle.textContent = t.projects.title;
   }
 
-  // Оновлюємо текст кнопки (span всередині .portfolio-cta)
   const portfolioCtaSpan = document.querySelector(".portfolio-cta span");
   if (portfolioCtaSpan && t.projects?.cta) {
     portfolioCtaSpan.textContent = t.projects.cta;
+  }
+
+  // Новий блок для цієї сторінки
+  const sectionIdea = document.querySelector(".section-idea");
+  if (sectionIdea && t.projects?.title) {
+    sectionIdea.textContent = t.projects.title;
+  }
+
+  const projectCards = document.querySelectorAll(
+    ".selected-work .project-card",
+  );
+  if (projectCards.length && t.projects?.items) {
+    projectCards.forEach((card, index) => {
+      const item = t.projects.items[index];
+      if (!item) return;
+
+      const identity = card.querySelector(".project-identity");
+      if (identity && item.identity) {
+        identity.textContent = item.identity;
+      }
+
+      const name = card.querySelector(".project-name");
+      if (name && item.title) {
+        name.textContent = item.title;
+      }
+
+      const description = card.querySelector(".project-description");
+      if (description && item.description) {
+        description.textContent = item.description;
+      }
+
+      const overlayBtns = card.querySelectorAll(
+        ".project-overlay .overlay-btn",
+      );
+      if (overlayBtns[0] && item.buttons?.demo) {
+        overlayBtns[0].textContent = item.buttons.demo;
+      }
+      if (overlayBtns[1] && item.buttons?.github) {
+        overlayBtns[1].textContent = item.buttons.github;
+      }
+
+      const stackContainer = card.querySelector(".stack-pills");
+      if (stackContainer && Array.isArray(item.stack)) {
+        stackContainer.innerHTML = "";
+        item.stack.forEach((tech) => {
+          const span = document.createElement("span");
+          span.className = "pill";
+          span.textContent = tech;
+          stackContainer.appendChild(span);
+        });
+      }
+    });
   }
 
   // ==========================================
