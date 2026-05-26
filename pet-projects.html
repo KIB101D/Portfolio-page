@@ -12,7 +12,11 @@
 
   <body>
     <header class="header">
-      <div class="header-logo"></div>
+      <div class="header-logo">
+        <a href="index.html">
+          <img src="./images/planet.png" alt="Logo" class="logo-img" />
+        </a>
+      </div>
       <div class="header-right">
         <div class="language-dropdown">
           <button class="dropdown-btn">UA ▾</button>
@@ -36,44 +40,16 @@
     <nav class="nav-menu" id="menu">
       <ul class="menu-list">
         <li class="menu-item">
-          <a
-            href="./index.html"
-            class="menu-link"
-            data-ua="Про мене"
-            data-en="About me"
-            data-pl="O mnie"
-            >Про мене</a
-          >
+          <a href="./index.html#about" class="menu-link">Про мене</a>
         </li>
         <li class="menu-item">
-          <a
-            href="#portfolio"
-            class="menu-link"
-            data-ua="Мої роботи"
-            data-en="My works"
-            data-pl="Projekty"
-            >Мої роботи</a
-          >
+          <a href="./pet-projects.html" class="menu-link">Мої роботи</a>
         </li>
         <li class="menu-item">
-          <a
-            href="#recommendation"
-            class="menu-link"
-            data-ua="Рек. лист"
-            data-en="Recommendation"
-            data-pl="List polecający"
-            >Рек. лист</a
-          >
+          <a href="./index.html#recommendation" class="menu-link">Рек. лист</a>
         </li>
         <li class="menu-item">
-          <a
-            href="#contacts"
-            class="menu-link"
-            data-ua="Контакти"
-            data-en="Contacts"
-            data-pl="Kontakt"
-            >Контакти</a
-          >
+          <a href="#contacts" class="menu-link">Контакти</a>
         </li>
       </ul>
     </nav>
@@ -83,49 +59,51 @@
     <main class="selected-work-page">
       <section class="selected-work" id="portfolio">
         <div class="section-header">
-          <span class="section-idea"> Selected Work</span>
+          <span class="section-idea">Selected Work</span>
         </div>
 
         <div class="projects-container">
-          <!-- ===================================================== -->
-          <!-- REACT SHOP -->
-          <!-- ===================================================== -->
-
           <article class="project-card card-product">
             <div class="project-preview">
               <span class="project-identity"> clean / premium / product </span>
 
-              <img
-                src="./images/react-shop.png"
-                alt="React Shop preview"
-                class="project-image"
-              />
+              <div class="custom-logo logo-reactshop">
+                <svg
+                  class="react-icon"
+                  viewBox="-10.5 -9.45 21 18.9"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="0" cy="0" r="2" fill="currentColor"></circle>
+                  <g stroke="currentColor" stroke-width="1" fill="none">
+                    <ellipse rx="10" ry="4.5"></ellipse>
+                    <ellipse rx="10" ry="4.5" transform="rotate(60)"></ellipse>
+                    <ellipse rx="10" ry="4.5" transform="rotate(120)"></ellipse>
+                  </g>
+                </svg>
+                <span class="logo-text">ReactShop</span>
+              </div>
 
               <div class="project-overlay">
                 <a
                   href="https://vite-react-ecommerce-jet.vercel.app/"
                   class="overlay-btn"
+                  >View Demo</a
                 >
-                  View Demo
-                </a>
-
                 <a
                   href="https://github.com/KIB101D/vite-react-ecommerce"
                   class="overlay-btn"
+                  >Github Repo</a
                 >
-                  Github Repo
-                </a>
               </div>
             </div>
 
             <div class="project-content">
               <h4 class="project-name">ReactShop</h4>
-
               <p class="project-description">
                 E-commerce storefront focused on polished UX, scalable state
                 management and reusable frontend architecture.
               </p>
-
               <div class="stack-pills">
                 <span class="pill">React</span>
                 <span class="pill">TypeScript</span>
@@ -134,10 +112,6 @@
             </div>
           </article>
 
-          <!-- ===================================================== -->
-          <!-- TASK MANAGER -->
-          <!-- ===================================================== -->
-
           <article class="project-card card-engineering">
             <div class="project-preview">
               <span class="project-identity"> structured / engineering </span>
@@ -145,11 +119,14 @@
               <div class="blueprint-grid"></div>
 
               <div class="preview-inner">
-                <img
-                  src="./images/task-manager.png"
-                  alt="Task Manager preview"
-                  class="project-image"
-                />
+                <div class="custom-logo logo-taskmanager">
+                  <div class="sys-status">SYS.OK // 200</div>
+                  <div class="bracket-logo">
+                    <span class="bracket">{</span>
+                    <span class="logo-text">TaskManager</span>
+                    <span class="bracket">}</span>
+                  </div>
+                </div>
 
                 <div class="crosshair top-left">+</div>
                 <div class="crosshair bottom-right">+</div>
@@ -159,27 +136,22 @@
                 <a
                   href="https://task-list-eight-teal.vercel.app/"
                   class="overlay-btn"
+                  >View Demo</a
                 >
-                  View Demo
-                </a>
-
                 <a
                   href="https://github.com/KIB101D/Task-List"
                   class="overlay-btn"
+                  >Github Repo</a
                 >
-                  Github Repo
-                </a>
               </div>
             </div>
 
             <div class="project-content">
               <h4 class="project-name">Task Manager</h4>
-
               <p class="project-description">
                 Task management app built around scalable state logic, reusable
                 hooks and maintainable frontend patterns.
               </p>
-
               <div class="stack-pills">
                 <span class="pill">React</span>
                 <span class="pill">TypeScript</span>
@@ -188,10 +160,6 @@
             </div>
           </article>
 
-          <!-- ===================================================== -->
-          <!-- CATS -->
-          <!-- ===================================================== -->
-
           <article class="project-card card-playful">
             <div class="project-preview">
               <span class="project-identity"> playful / experimental </span>
@@ -199,32 +167,30 @@
               <div class="preview-inner">
                 <div class="ambient-glow"></div>
 
-                <img
-                  src="./images/CATS!.png"
-                  alt="Cats project preview"
-                  class="project-image"
-                />
+                <div class="custom-logo logo-cats">
+                  <div class="logo-text-wrapper">
+                    <span class="logo-text">Cats</span>
+                    <span class="sparkle">✨</span>
+                  </div>
+                </div>
               </div>
 
               <div class="project-overlay">
-                <a href="https://kib101d.github.io/CATS/" class="overlay-btn">
-                  View Demo
-                </a>
-
-                <a href="https://github.com/KIB101D/CATS" class="overlay-btn">
-                  Github Repo
-                </a>
+                <a href="https://kib101d.github.io/CATS/" class="overlay-btn"
+                  >View Demo</a
+                >
+                <a href="https://github.com/KIB101D/CATS" class="overlay-btn"
+                  >Github Repo</a
+                >
               </div>
             </div>
 
             <div class="project-content">
               <h4 class="project-name">Cats</h4>
-
               <p class="project-description">
                 Interactive multilingual experience combining playful UX,
                 animations and modular JavaScript architecture.
               </p>
-
               <div class="stack-pills">
                 <span class="pill">JavaScript</span>
                 <span class="pill">i18n</span>
@@ -233,10 +199,6 @@
               </div>
             </div>
           </article>
-
-          <!-- ===================================================== -->
-          <!-- WEATHER APP -->
-          <!-- ===================================================== -->
 
           <article class="project-card card-atmospheric">
             <div class="ambient-orb orb-primary"></div>
@@ -248,37 +210,33 @@
                   calm / practical / glassmorphism
                 </span>
 
-                <img
-                  src="./images/wetherApp.png"
-                  alt="Weather App preview"
-                  class="project-image"
-                />
+                <div class="custom-logo logo-weather">
+                  <div class="glass-plate">
+                    <span class="logo-text">Weather</span>
+                    <span class="logo-deg">24°</span>
+                  </div>
+                </div>
 
                 <div class="project-overlay">
                   <a
                     href="https://kib101d.github.io/weather-app/"
                     class="overlay-btn"
+                    >View Demo</a
                   >
-                    View Demo
-                  </a>
-
                   <a
                     href="https://github.com/KIB101D/weather-app"
                     class="overlay-btn"
+                    >Github Repo</a
                   >
-                    Github Repo
-                  </a>
                 </div>
               </div>
 
               <div class="project-content">
                 <h4 class="project-name">Weather App</h4>
-
                 <p class="project-description">
                   Responsive weather experience with localization, API
                   integration and modular frontend architecture.
                 </p>
-
                 <div class="stack-pills">
                   <span class="pill">JavaScript</span>
                   <span class="pill">API</span>
