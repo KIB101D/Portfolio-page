@@ -25,13 +25,37 @@ main {
   margin-top: 0;
   transition: margin-top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.header.hidden + main {
-  margin-top: -80px;
-}
 
 .container {
   width: 100%;
   overflow-x: hidden;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ff6a00;
+  border-radius: 999px;
+  border: 2px solid #0a0a0a;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7f26;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #e85f00;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ff6a00 #0a0a0a;
 }
 
 @keyframes fadeInUp {
@@ -69,17 +93,18 @@ main {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 2rem 3rem;
+  height: 100px;
+  padding: 0 3rem;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: transparent;
-  z-index: 1000;
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.6s cubic-bezier(0.19, 1, 0.22, 1), background 0.4s ease, box-shadow 0.4s ease;
 }
 .header.hidden {
-  pointer-events: none;
   opacity: 0;
+  transform: translateY(-120%);
+  pointer-events: none;
 }
 .header.hidden .nav-menu {
   opacity: 1;
@@ -87,30 +112,66 @@ main {
   transform: translateY(0);
 }
 .header.visible {
-  transform: translateY(0);
   opacity: 1;
-  background: rgba(10, 10, 10, 0.9);
+  transform: translateY(0);
+  background: rgba(10, 10, 10, 0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 1.5rem 3rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 @media (max-width: 767px) {
   .header {
-    padding: 1.5rem;
+    height: 80px;
+    padding: 1rem 0.5rem;
   }
   .header.visible {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.5rem;
   }
 }
 
 .header-logo {
   width: 39px;
   height: 39px;
-  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.header-logo:hover {
-  transform: translateX(5px);
+.header-logo img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
+}
+.header-logo::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 72%);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.header-logo:hover img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.28));
+}
+.header-logo:hover::before {
+  opacity: 1;
+  transform: scale(1.15);
+}
+.header-logo:active img {
+  transform: scale(0.98);
+}
+@media (max-width: 767px) {
+  .header-logo {
+    width: 32px;
+    height: 32px;
+  }
 }
 @media (max-width: 767px) {
   .header-logo {
@@ -673,7 +734,7 @@ main {
 }
 
 .about-section {
-  padding: 8rem 2rem;
+  padding: 2rem 2rem;
   background: #0a0a0a;
   position: relative;
   overflow: hidden;
@@ -697,6 +758,8 @@ main {
 }
 
 .about-container {
+  min-height: 100vh;
+  min-height: 100svh;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
@@ -940,7 +1003,7 @@ main {
 .about-title {
   font-size: 3.5rem;
   font-weight: 300;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
   letter-spacing: 3px;
   -webkit-background-clip: text;
@@ -957,7 +1020,7 @@ main {
 @media (max-width: 767px) {
   .about-title {
     font-size: 2.8rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
   }
 }
 .about-title::after {
@@ -1045,6 +1108,9 @@ main {
 @media (max-width: 767px) {
   .about-skills {
     justify-content: center;
+  }
+  .about-skills .skill-tag:last-child {
+    display: none;
   }
 }
 
@@ -1438,7 +1504,7 @@ main {
 }
 
 .recommendation-section {
-  padding: 8rem 2rem;
+  padding: 0rem 2rem;
   background: #0a0a0a;
   position: relative;
   overflow: hidden;
@@ -1452,7 +1518,7 @@ main {
 }
 @media (max-width: 767px) {
   .recommendation-section {
-    padding: 6rem 1.5rem;
+    padding: 0rem 1.5rem;
   }
 }
 
@@ -1987,10 +2053,10 @@ main {
 }
 
 .selected-work {
-  background-color: #0b0b0f;
-  color: #f4f4f6;
+  background-color: #0a0a0a;
+  color: #f5f7fa;
   padding: 6rem 1.5rem;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Manrope", system-ui, sans-serif;
 }
 @media (min-width: 768px) {
   .selected-work {
@@ -2070,8 +2136,11 @@ main {
   overflow: hidden;
   border-radius: 1rem;
   flex: 0 0 auto;
+  aspect-ratio: 16/10;
 }
 .selected-work .project-card .project-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
@@ -2081,12 +2150,113 @@ main {
   display: block;
   filter: brightness(0.82);
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+  z-index: 0;
+}
+.selected-work .project-card .custom-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #09090b;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+.selected-work .project-card .custom-logo.logo-reactshop {
+  flex-direction: column;
+  gap: 1rem;
+  background: radial-gradient(circle at center, rgba(79, 70, 229, 0.08), #09090b);
+}
+.selected-work .project-card .custom-logo.logo-reactshop .react-icon {
+  width: 50px;
+  height: 50px;
+  color: rgba(97, 218, 251, 0.8);
+  animation: react-spin 20s linear infinite;
+}
+.selected-work .project-card .custom-logo.logo-reactshop .logo-text {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #f4f4f6;
+}
+.selected-work .project-card .custom-logo.logo-taskmanager {
+  background: transparent;
+  font-family: "JetBrains Mono", monospace;
+}
+.selected-work .project-card .custom-logo.logo-taskmanager .bracket-logo {
+  font-size: 1.5rem;
+  color: #f4f4f6;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.selected-work .project-card .custom-logo.logo-taskmanager .bracket-logo .bracket {
+  color: rgba(56, 189, 248, 0.5);
+  font-weight: 300;
+}
+.selected-work .project-card .custom-logo.logo-taskmanager .sys-status {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 0.65rem;
+  color: rgba(56, 189, 248, 0.4);
+}
+.selected-work .project-card .custom-logo.logo-cats {
+  background: transparent;
+}
+.selected-work .project-card .custom-logo.logo-cats .logo-text-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.selected-work .project-card .custom-logo.logo-cats .logo-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #f4f4f6;
+  letter-spacing: 1px;
+}
+.selected-work .project-card .custom-logo.logo-cats .sparkle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+.selected-work .project-card .custom-logo.logo-weather {
+  background: transparent;
+}
+.selected-work .project-card .custom-logo.logo-weather .glass-plate {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.selected-work .project-card .custom-logo.logo-weather .glass-plate .logo-text {
+  font-weight: 300;
+  font-size: 1.5rem;
+  color: #f8fafc;
+  letter-spacing: 0.05em;
+}
+.selected-work .project-card .custom-logo.logo-weather .glass-plate .logo-deg {
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: rgba(14, 165, 233, 0.8);
 }
 .selected-work .project-card .project-identity {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  z-index: 3;
+  z-index: 5;
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 0.8rem;
@@ -2095,53 +2265,60 @@ main {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
+  color: #f5f7fa;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .selected-work .project-card .project-overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 10;
+  background: rgba(9, 9, 11, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 1rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
   opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.18) 45%, rgba(0, 0, 0, 0.55) 100%);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-  transition-delay: 0s;
+  transition: opacity 0.4s ease;
 }
-.selected-work .project-card:hover .project-overlay {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-  transition-delay: 0.12s;
-}
-.selected-work .project-card .overlay-btn {
+.selected-work .project-card .project-overlay .overlay-btn {
   pointer-events: auto;
   text-decoration: none;
   font-size: 0.875rem;
-  font-weight: 600;
-  padding: 0.7rem 1rem;
-  border-radius: 0.75rem;
-  color: #fff;
+  font-weight: 500;
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.5rem;
+  color: #f5f7fa;
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.selected-work .project-card .overlay-btn:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.95);
-  color: #09090b;
-  border-color: rgba(255, 255, 255, 0.95);
+.selected-work .project-card .project-overlay .overlay-btn:first-child {
+  background: #fff;
+  color: #000;
+  border-color: transparent;
+}
+.selected-work .project-card .project-overlay .overlay-btn:first-child:hover {
+  background: #e4e4e7;
+  transform: scale(1.05);
+}
+.selected-work .project-card .project-overlay .overlay-btn:last-child {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.selected-work .project-card .project-overlay .overlay-btn:last-child:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
 }
 .selected-work .project-card .project-content {
   display: flex;
@@ -2164,7 +2341,7 @@ main {
   }
 }
 .selected-work .project-card .project-description {
-  color: #a1a1aa;
+  color: rgba(245, 247, 250, 0.7);
   font-weight: 300;
   line-height: 1.65;
   font-size: 0.95rem;
@@ -2180,9 +2357,9 @@ main {
   font-size: 0.75rem;
   padding: 0.3rem 0.8rem;
   background: rgba(255, 255, 255, 0.04);
-  color: #d4d4d8;
+  color: rgba(245, 247, 250, 0.9);
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   white-space: nowrap;
 }
 .selected-work .project-card .cta-buttons {
@@ -2199,15 +2376,22 @@ main {
   border-radius: 0.65rem;
   transition: all 0.2s ease;
 }
-.selected-work .project-card:hover {
-  transform: translateY(-4px);
-}
 .selected-work .project-card:hover .project-image {
-  transform: scale(1.04);
+  transform: scale(1.05);
   filter: brightness(0.72);
+}
+.selected-work .project-card:hover .custom-logo {
+  transform: scale(1.05);
 }
 .selected-work .project-card:hover .project-overlay {
   opacity: 1;
+}
+.selected-work .project-card:hover .project-overlay .overlay-btn {
+  transform: translateY(0);
+  opacity: 1;
+}
+.selected-work .project-card:hover .project-overlay .overlay-btn:nth-child(2) {
+  transition-delay: 0.08s;
 }
 .selected-work {
   /* -------------------------------------------------------------
@@ -2215,42 +2399,42 @@ main {
   ------------------------------------------------------------- */
 }
 .selected-work .card-product {
-  background: rgba(39, 39, 42, 0.2);
-  border: 1px solid rgba(63, 63, 70, 0.4);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.25rem;
   border-radius: 1rem;
 }
 .selected-work .card-product .project-preview {
-  background: #09090b;
-  border: 1px solid #27272a;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 .selected-work .card-product .project-identity {
-  color: #818cf8;
+  color: #ff6b35;
 }
 .selected-work .card-product .pill {
-  background: rgba(79, 70, 229, 0.12);
-  color: #7d97ff;
-  border: 1px solid rgba(99, 102, 241, 0.22);
+  background: rgba(255, 107, 53, 0.1);
+  color: #ff6b35;
+  border: 1px solid rgba(255, 107, 53, 0.2);
 }
-.selected-work .card-product .overlay-btn:first-child {
-  background: #4f46e5;
-  border-color: rgba(56, 46, 242, 0.35);
+.selected-work .card-product .project-overlay .overlay-btn:first-child {
+  background: #ff6b35;
+  color: #0a0a0a;
+  border-color: transparent;
 }
-.selected-work .card-product .overlay-btn:first-child:hover {
-  background: #4338ca;
-  color: #fff;
-  border-color: rgba(79, 70, 229, 0.35);
+.selected-work .card-product .project-overlay .overlay-btn:first-child:hover {
+  background: rgb(255, 69.6336633663, 2);
+  color: #0a0a0a;
 }
-.selected-work .card-product .overlay-btn:last-child {
+.selected-work .card-product .project-overlay .overlay-btn:last-child {
   background: rgba(255, 255, 255, 0.08);
 }
-.selected-work .card-product .overlay-btn:last-child:hover {
-  background: rgba(255, 255, 255, 0.95);
-  color: #09090b;
+.selected-work .card-product .project-overlay .overlay-btn:last-child:hover {
+  background: #ffffff;
+  color: #0a0a0a;
 }
 .selected-work .card-product:hover {
-  border-color: rgba(79, 70, 229, 0.3);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+  border-color: rgba(255, 107, 53, 0.3);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.3);
 }
 .selected-work {
   /* -------------------------------------------------------------
@@ -2258,69 +2442,68 @@ main {
   ------------------------------------------------------------- */
 }
 .selected-work .card-engineering {
-  background: #09090b;
-  border: 1px solid #27272a;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.85rem;
   padding: 1.25rem;
   font-family: "JetBrains Mono", monospace;
 }
 .selected-work .card-engineering .project-preview {
-  background: rgba(39, 39, 42, 0.1);
-  border: 1px solid #27272a;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 .selected-work .card-engineering .project-identity {
   font-size: 0.65rem;
-  color: #38bdf8;
+  color: #ffffff;
 }
 .selected-work .card-engineering .project-content {
-  background: #0d1117;
+  background: #0a0a0a;
   padding: 1.1rem 0 0 0;
 }
 .selected-work .card-engineering .project-description {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Manrope", system-ui, sans-serif;
   font-size: 0.875rem;
 }
 .selected-work .card-engineering .pill {
   font-size: 0.7rem;
   padding: 0.22rem 0.65rem;
-  background: #18181b;
-  color: #7dd3fc;
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  background: #111;
+  color: #f5f7fa;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.35rem;
 }
-.selected-work .card-engineering .overlay-btn {
+.selected-work .card-engineering .project-overlay .overlay-btn {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.selected-work .card-engineering .overlay-btn:first-child {
-  background: #38bdf8;
-  color: #09090b;
-  border: 1px solid #7dd3fc;
+.selected-work .card-engineering .project-overlay .overlay-btn:first-child {
+  background: #ffffff;
+  color: #0a0a0a;
+  border: 1px solid #ffffff;
 }
-.selected-work .card-engineering .overlay-btn:first-child:hover {
-  background: #0ea5e9;
-  color: #09090b;
+.selected-work .card-engineering .project-overlay .overlay-btn:first-child:hover {
+  background: rgba(255, 255, 255, 0.8);
 }
-.selected-work .card-engineering .overlay-btn:last-child {
+.selected-work .card-engineering .project-overlay .overlay-btn:last-child {
   background: rgba(255, 255, 255, 0.06);
 }
-.selected-work .card-engineering .overlay-btn:last-child:hover {
-  background: rgba(255, 255, 255, 0.92);
-  color: #09090b;
+.selected-work .card-engineering .project-overlay .overlay-btn:last-child:hover {
+  background: #ffffff;
+  color: #0a0a0a;
 }
 .selected-work .card-engineering .project-preview .blueprint-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.04;
+  opacity: 0.08;
   background-size: 24px 24px;
-  background-image: linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px);
+  background-image: linear-gradient(to right, #f5f7fa 1px, transparent 1px), linear-gradient(to bottom, #f5f7fa 1px, transparent 1px);
 }
 .selected-work .card-engineering .project-preview .preview-inner {
   width: 100%;
   height: 100%;
-  border: 1px dashed #27272a;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
   border-radius: 0.35rem;
-  background: rgba(9, 9, 11, 0.6);
+  background: rgba(10, 10, 10, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2328,14 +2511,14 @@ main {
   overflow: hidden;
 }
 .selected-work .card-engineering .project-preview .preview-placeholder {
-  color: #52525b;
+  color: rgba(245, 247, 250, 0.5);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 .selected-work .card-engineering .project-preview .crosshair {
   position: absolute;
-  color: #27272a;
+  color: rgba(245, 247, 250, 0.4);
   font-size: 9px;
 }
 .selected-work .card-engineering .project-preview .crosshair.top-left {
@@ -2353,20 +2536,20 @@ main {
 }
 .selected-work .card-playful {
   background: rgba(255, 255, 255, 0.01);
-  border: 1px solid rgba(94, 234, 212, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 1.25rem;
   transition: all 0.4s ease;
 }
 .selected-work .card-playful .project-preview {
-  background: linear-gradient(135deg, rgba(94, 234, 212, 0.18), rgba(34, 211, 238, 0.08));
-  border: 1px solid rgba(110, 231, 183, 0.08);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 107, 53, 0.1);
   border-radius: 1rem;
 }
 .selected-work .card-playful .preview-inner {
   width: 100%;
   height: 100%;
-  background: #09090b;
+  background: #0a0a0a;
   border-radius: 0.95rem;
   display: flex;
   align-items: center;
@@ -2380,11 +2563,11 @@ main {
   right: 0;
   width: 10rem;
   height: 10rem;
-  background: rgba(45, 212, 191, 0.12);
+  background: rgba(255, 107, 53, 0.15);
   filter: blur(40px);
 }
 .selected-work .card-playful .project-identity {
-  color: #5eead4;
+  color: #ff6b35;
   opacity: 0.9;
 }
 .selected-work .card-playful .project-name {
@@ -2393,28 +2576,28 @@ main {
 }
 .selected-work .card-playful .pill {
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(110, 231, 183, 0.08);
-  color: #d4d4d8;
+  border: 1px solid rgba(255, 107, 53, 0.15);
+  color: #f5f7fa;
 }
-.selected-work .card-playful .overlay-btn:first-child {
-  background: rgba(16, 185, 129, 0.16);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: #6ee7b7;
+.selected-work .card-playful .project-overlay .overlay-btn:first-child {
+  background: rgba(255, 107, 53, 0.15);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  color: #ff6b35;
 }
-.selected-work .card-playful .overlay-btn:first-child:hover {
-  background: rgba(16, 185, 129, 0.24);
-  color: #fff;
+.selected-work .card-playful .project-overlay .overlay-btn:first-child:hover {
+  background: rgba(255, 107, 53, 0.25);
+  color: #ffffff;
 }
-.selected-work .card-playful .overlay-btn:last-child {
+.selected-work .card-playful .project-overlay .overlay-btn:last-child {
   background: rgba(255, 255, 255, 0.08);
 }
-.selected-work .card-playful .overlay-btn:last-child:hover {
-  background: rgba(255, 255, 255, 0.92);
-  color: #09090b;
+.selected-work .card-playful .project-overlay .overlay-btn:last-child:hover {
+  background: #ffffff;
+  color: #0a0a0a;
 }
 .selected-work .card-playful:hover {
-  border-color: rgba(94, 234, 212, 0.12);
-  box-shadow: 0 0 40px rgba(45, 212, 191, 0.05);
+  border-color: rgba(255, 107, 53, 0.2);
+  box-shadow: 0 0 40px rgba(255, 107, 53, 0.08);
 }
 .selected-work {
   /* -------------------------------------------------------------
@@ -2422,16 +2605,16 @@ main {
   ------------------------------------------------------------- */
 }
 .selected-work .card-atmospheric {
-  --color-primary: #0ea5e9;
+  --color-primary: #ff6b35;
   --color-bg-card: rgba(255, 255, 255, 0.01);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --color-text: #f4f4f6;
-  --color-text-light: #a1a1aa;
+  --glass-bg: rgba(10, 10, 10, 0.6);
+  --color-text: #f5f7fa;
+  --color-text-light: rgba(245, 247, 250, 0.7);
   --border-radius-lg: 1rem;
   position: relative;
   border-radius: var(--border-radius-lg);
   background: var(--color-bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
   transition: all 0.4s ease;
   padding: 0;
@@ -2449,7 +2632,7 @@ main {
   width: 300px;
   height: 300px;
   background: var(--color-primary);
-  opacity: 0.08;
+  opacity: 0.15;
 }
 .selected-work .card-atmospheric .orb-light {
   bottom: -10%;
@@ -2457,7 +2640,7 @@ main {
   width: 400px;
   height: 400px;
   background: #ffffff;
-  opacity: 0.02;
+  opacity: 0.03;
 }
 .selected-work .card-atmospheric .glass-content {
   position: relative;
@@ -2467,7 +2650,7 @@ main {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -2486,10 +2669,10 @@ main {
 .selected-work .card-atmospheric .pill {
   font-size: 0.75rem;
   padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .selected-work .card-atmospheric .project-preview {
   background: rgba(255, 255, 255, 0.02);
@@ -2499,36 +2682,40 @@ main {
   color: var(--color-text-light);
   font-family: "JetBrains Mono", monospace;
 }
-.selected-work .card-atmospheric .overlay-btn:first-child {
-  background: rgba(14, 165, 233, 0.14);
-  color: #7dd3fc;
-  border: 1px solid rgba(14, 165, 233, 0.3);
+.selected-work .card-atmospheric .project-overlay .overlay-btn:first-child {
+  background: rgba(255, 107, 53, 0.15);
+  color: #ff6b35;
+  border: 1px solid rgba(255, 107, 53, 0.3);
 }
-.selected-work .card-atmospheric .overlay-btn:first-child:hover {
-  background: rgba(14, 165, 233, 0.24);
-  color: #fff;
+.selected-work .card-atmospheric .project-overlay .overlay-btn:first-child:hover {
+  background: rgba(255, 107, 53, 0.25);
+  color: #ffffff;
 }
-.selected-work .card-atmospheric .overlay-btn:last-child {
+.selected-work .card-atmospheric .project-overlay .overlay-btn:last-child {
   background: rgba(255, 255, 255, 0.08);
 }
-.selected-work .card-atmospheric .overlay-btn:last-child:hover {
-  background: rgba(255, 255, 255, 0.92);
-  color: #09090b;
+.selected-work .card-atmospheric .project-overlay .overlay-btn:last-child:hover {
+  background: #ffffff;
+  color: #0a0a0a;
 }
 .selected-work .card-atmospheric:hover {
-  border-color: rgba(14, 165, 233, 0.2);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+@keyframes react-spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @media (max-width: 767px) {
   .selected-work .project-card .project-preview {
     height: 240px;
   }
   .selected-work .project-card .project-overlay {
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.75rem;
   }
-  .selected-work .project-card .overlay-btn {
-    flex: 1 1 auto;
+  .selected-work .project-card .project-overlay .overlay-btn {
+    width: min(100%, 220px);
     text-align: center;
   }
 }/*# sourceMappingURL=styles.css.map */
