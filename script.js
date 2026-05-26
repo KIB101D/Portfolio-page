@@ -415,6 +415,7 @@ function initSmoothScroll() {
 function initLavaLamp() {
   const container = document.querySelector(".lamp-container");
   const lamp = document.querySelector(".lava-lamp");
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
   if (!container || !lamp) {
     console.log("Елементи лави не знайдені, пропускаємо ініціалізацію");
@@ -422,72 +423,167 @@ function initLavaLamp() {
   }
 
   let blobs = [];
+  let animationId;
+  let isVisible = true;
 
   function createBlobs() {
     container.innerHTML = "";
     blobs = [];
 
-    for (let i = 0; i < 5; i++) {
+    const blobCount = isMobile ? 3 : 5;
+
+    // curated mobile motion
+    const mobileConfigs = [
+      {
+        size: 180,
+        left: 5,
+        bottom: 8,
+        xAmplitude: 22,
+        yAmplitude: 30,
+        speed: 0.2,
+        xDirection: 1,
+        yDirection: -1,
+        color: "#ff5e00",
+      },
+
+      {
+        size: 140,
+        left: 65,
+        bottom: 18,
+        xAmplitude: 16,
+        yAmplitude: 24,
+        speed: 0.3,
+        xDirection: -1,
+        yDirection: 1,
+        color: "#ff8c00",
+      },
+      {
+        size: 140,
+        left: 25,
+        bottom: 18,
+        xAmplitude: 16,
+        yAmplitude: 24,
+        speed: 0.4,
+        xDirection: -1,
+        yDirection: 1,
+        color: "#ff5e00",
+      },
+    ];
+
+    for (let i = 0; i < blobCount; i++) {
       const blob = document.createElement("div");
       blob.className = "blob";
 
-      const size = 50 + Math.random() * 70;
-      const left = 10 + Math.random() * 80;
-      const bottom = Math.random() * 20;
+      const mobileConfig = mobileConfigs[i];
+
+      // DESKTOP
+      const size = isMobile ? mobileConfig.size : 50 + Math.random() * 70;
+
+      const left = isMobile ? mobileConfig.left : 10 + Math.random() * 80;
+
+      const bottom = isMobile ? mobileConfig.bottom : Math.random() * 20;
 
       blob.style.width = `${size}px`;
       blob.style.height = `${size}px`;
       blob.style.left = `${left}%`;
       blob.style.bottom = `${bottom}%`;
+      if (isMobile) {
+        blob.style.color = mobileConfig.color; // Тепер radial-gradient бере цей колір
+      }
 
       container.appendChild(blob);
+
       blobs.push({
         element: blob,
-        speed: 0.5 + Math.random() * 1.5,
-        xDirection: Math.random() > 0.5 ? 1 : -1,
-        yDirection: Math.random() > 0.5 ? 1 : -1,
-        xAmplitude: 0.5 + Math.random() * 2,
-        yAmplitude: 1 + Math.random() * 3,
+
+        // DESKTOP
+        speed: isMobile ? mobileConfig.speed : 0.5 + Math.random() * 1.5,
+
+        xDirection: isMobile
+          ? mobileConfig.xDirection
+          : Math.random() > 0.5
+            ? 1
+            : -1,
+
+        yDirection: isMobile
+          ? mobileConfig.yDirection
+          : Math.random() > 0.5
+            ? 1
+            : -1,
+
+        xAmplitude: isMobile
+          ? mobileConfig.xAmplitude
+          : 0.5 + Math.random() * 2,
+
+        yAmplitude: isMobile ? mobileConfig.yAmplitude : 1 + Math.random() * 3,
       });
     }
   }
 
   function updateBlobs() {
-    const time = Date.now() * 0.001;
+    const time = performance.now() * (isMobile ? 0.00035 : 0.001);
 
-    blobs.forEach((blob) => {
-      const x = Math.sin(time * blob.speed) * blob.xAmplitude * blob.xDirection;
+    blobs.forEach((blob, index) => {
+      const x =
+        Math.sin(time * blob.speed + index) * blob.xAmplitude * blob.xDirection;
+
       const y =
-        Math.cos(time * blob.speed * 0.7) * blob.yAmplitude * blob.yDirection;
+        Math.cos(time * blob.speed * 0.7 + index) *
+        blob.yAmplitude *
+        blob.yDirection;
 
       blob.element.style.transform = `translate(${x}px, ${y}px)`;
     });
 
-    requestAnimationFrame(updateBlobs);
+    animationId = requestAnimationFrame(updateBlobs);
   }
 
-  lamp.addEventListener("mousemove", (e) => {
-    const rect = lamp.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  if (!isMobile) {
+    lamp.addEventListener("mousemove", (e) => {
+      const rect = lamp.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
 
-    blobs.forEach((blob, index) => {
-      const sensitivity = 0.3 + index * 0.1;
-      const offsetX = x * 15 * sensitivity;
-      const offsetY = y * 15 * sensitivity;
+      blobs.forEach((blob, index) => {
+        const sensitivity = 0.3 + index * 0.1;
+        const offsetX = x * 15 * sensitivity;
+        const offsetY = y * 15 * sensitivity;
 
-      const currentTransform = blob.element.style.transform;
-      blob.element.style.transform = `${currentTransform} translate(${offsetX}px, ${offsetY}px)`;
+        const currentTransform = blob.element.style.transform;
+
+        blob.element.style.transform = `${currentTransform} translate(${offsetX}px, ${offsetY}px)`;
+      });
     });
-  });
 
-  lamp.addEventListener("mouseleave", () => {
-    // Не потрібно скидати, оскільки анімація продовжується
-  });
+    lamp.addEventListener("mouseleave", () => {
+      // desktop untouched
+    });
+  }
+
+  // MOBILE optimization only
+  if (isMobile) {
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+
+      if (isVisible) {
+        updateBlobs();
+      } else {
+        cancelAnimationFrame(animationId);
+      }
+    });
+
+    observer.observe(lamp);
+  }
 
   createBlobs();
-  updateBlobs();
 
+  if (!isMobile) {
+    updateBlobs();
+  } else if (isVisible) {
+    updateBlobs();
+  }
+
+  // DESKTOP resize untouched
   function handleResize() {
     if (window.innerWidth > 1200) {
       createBlobs();
