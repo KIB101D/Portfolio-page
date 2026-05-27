@@ -1115,7 +1115,6 @@ const isTouchDevice = window.matchMedia(
 ).matches;
 
 if (isTouchDevice) {
-  // Шукаємо ТІЛЬКИ області з картинкою/логотипом, а не всю картку
   const previews = document.querySelectorAll(".project-preview");
 
   previews.forEach((preview) => {
@@ -1123,26 +1122,36 @@ if (isTouchDevice) {
       const clickedBtn = e.target.closest(".overlay-btn");
       const isOpen = preview.classList.contains("is-open");
 
+      // 1. Якщо картка відкрита і клікнули ЧІТКО по кнопці
       if (clickedBtn && isOpen) {
-        return;
+        e.stopPropagation(); // СТОП! Не даємо події йти до document чи закривати картку
+        return; // Браузер чисто і спокійно переходить за посиланням <a>
       }
 
+      // 2. Якщо картка закрита — першим тапом просто відкриваємо її
       if (!isOpen) {
         e.preventDefault();
+        e.stopPropagation();
+
+        // Закриваємо всі інші відкриті картки
         document.querySelectorAll(".project-preview.is-open").forEach((p) => {
           p.classList.remove("is-open");
         });
+
         preview.classList.add("is-open");
         return;
       }
 
-      if (isOpen && !clickedBtn) {
+      // 3. Другий тап МИМО кнопки (по фону картинки) -> закриваємо оверлей
+      // Додаємо жорстку перевірку: закривати ТІЛЬКИ якщо тапнули не по кнопці і не по оверлею з кнопками
+      if (isOpen && !clickedBtn && !e.target.closest(".project-overlay")) {
         e.preventDefault();
         preview.classList.remove("is-open");
       }
     });
   });
 
+  // Клік на будь-яке порожнє місце екрану закриває відкриті картки
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".project-preview")) {
       document.querySelectorAll(".project-preview.is-open").forEach((p) => {
