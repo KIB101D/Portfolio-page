@@ -2322,6 +2322,7 @@ main {
 }
 .selected-work .project-card .project-overlay .overlay-btn {
   pointer-events: auto;
+  touch-action: manipulation;
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;

@@ -1123,7 +1123,7 @@ if (isTouchDevice) {
       const clickedBtn = e.target.closest(".overlay-btn");
       const isOpen = preview.classList.contains("is-open");
 
-       if (clickedBtn && isOpen) {
+      if (clickedBtn && isOpen) {
         return;
       }
 
