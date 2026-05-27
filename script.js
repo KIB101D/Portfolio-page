@@ -1123,11 +1123,7 @@ if (isTouchDevice) {
       const clickedBtn = e.target.closest(".overlay-btn");
       const isOpen = preview.classList.contains("is-open");
 
-      if (clickedBtn && isOpen) {
-        const url = clickedBtn.getAttribute("href");
-        if (url) {
-          window.open(url, "_blank");
-        }
+       if (clickedBtn && isOpen) {
         return;
       }
 
