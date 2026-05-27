@@ -2784,4 +2784,8 @@ main {
     font-size: 0.8rem !important;
     padding: 0.55rem 1.1rem !important;
   }
+  .selected-work .project-card .project-overlay:hover, .selected-work .project-card .project-overlay:first-child:hover, .selected-work .project-card .project-overlay:last-child:hover {
+    transform: none !important;
+    scale: 1 !important;
+  }
 }/*# sourceMappingURL=styles.css.map */

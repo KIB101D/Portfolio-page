@@ -3187,6 +3187,13 @@ $font-mono: "JetBrains Mono", monospace;
           font-size: 0.8rem !important;
           padding: 0.55rem 1.1rem !important;
         }
+
+        &:hover,
+        &:first-child:hover,
+        &:last-child:hover {
+          transform: none !important; // Забороняємо кнопці збільшуватися від тапу
+          scale: 1 !important;
+        }
       }
     }
   }
