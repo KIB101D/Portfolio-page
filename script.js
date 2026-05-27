@@ -1110,48 +1110,44 @@ function initFooterAnimation() {
 
   observer.observe(footer);
 }
-
 const isTouchDevice = window.matchMedia(
   "(hover: none) and (pointer: coarse)",
 ).matches;
 
 if (isTouchDevice) {
-  const cards = document.querySelectorAll(".project-card");
+  // Шукаємо ТІЛЬКИ області з картинкою/логотипом, а не всю картку
+  const previews = document.querySelectorAll(".project-preview");
 
-  cards.forEach((card) => {
-    const overlayButtons = card.querySelectorAll(".overlay-btn");
-
-    card.addEventListener("click", (e) => {
+  previews.forEach((preview) => {
+    preview.addEventListener("click", (e) => {
       const clickedBtn = e.target.closest(".overlay-btn");
-      const isOpen = card.classList.contains("is-open");
+      const isOpen = preview.classList.contains("is-open");
 
-      // Якщо натиснули кнопку і карточка вже відкрита
-      if (clickedBtn && isOpen) return;
-
-      // Перший тап → відкриваємо overlay
-      if (!isOpen) {
-        e.preventDefault();
-
-        // Закриваємо інші карточки
-        cards.forEach((c) => c.classList.remove("is-open"));
-
-        card.classList.add("is-open");
-
+      if (clickedBtn && isOpen) {
         return;
       }
 
-      // Другий тап НЕ по кнопці → закриваємо
+      if (!isOpen) {
+        e.preventDefault();
+        document.querySelectorAll(".project-preview.is-open").forEach((p) => {
+          p.classList.remove("is-open");
+        });
+        preview.classList.add("is-open");
+        return;
+      }
+
       if (isOpen && !clickedBtn) {
         e.preventDefault();
-        card.classList.remove("is-open");
+        preview.classList.remove("is-open");
       }
     });
   });
 
-  // Закриття при тапі поза карточкою
   document.addEventListener("click", (e) => {
-    if (!e.target.closest(".project-card")) {
-      cards.forEach((card) => card.classList.remove("is-open"));
+    if (!e.target.closest(".project-preview")) {
+      document.querySelectorAll(".project-preview.is-open").forEach((p) => {
+        p.classList.remove("is-open");
+      });
     }
   });
 }

@@ -3126,19 +3126,65 @@ $font-mono: "JetBrains Mono", monospace;
   }
 
   // Мобільна адаптація кнопок
+  // ==========================================================
+  // ОБМЕЖЕННЯ ХОВЕРУ ТІЛЬКИ ДО ПРЕВ'Ю (ПЛЕЙСХОЛДЕРА)
+  // ==========================================================
   @media (max-width: 767px) {
     .project-card {
-      .project-preview {
-        height: 240px;
+      // 1. Вимикаємо ховер-ефекти для всієї картки (текст знизу більше ні на що не впливає)
+      transform: none !important;
+      box-shadow: none !important;
+
+      &:hover {
+        transform: none !important;
+        box-shadow: none !important;
+
+        // Скасовуємо старе десктопне спрацьовування оверлею при наведенні на всю картку
+        .project-overlay {
+          opacity: 0;
+
+          .overlay-btn {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+        }
       }
 
+      .project-preview {
+        height: 240px;
+
+        // 2. ПЕРЕНОСИМО ХОВЕР СЮДИ: тепер при тапі на прев'ю спрацьовує магія
+        &:hover {
+          .project-image,
+          .custom-logo {
+            transform: scale(1.05);
+          }
+
+          .project-overlay {
+            opacity: 1;
+
+            .overlay-btn {
+              transform: translateY(0);
+              opacity: 1;
+
+              &:nth-child(2) {
+                transition-delay: 0.08s;
+              }
+            }
+          }
+        }
+      }
+
+      // Адаптуємо кнопки під тач-скріни в один рядок, щоб поміщалися
       .project-overlay {
-        flex-direction: column;
+        flex-direction: row !important;
         gap: 0.75rem;
+        padding: 0 1rem;
 
         .overlay-btn {
-          width: min(100%, 220px);
-          text-align: center;
+          width: auto !important;
+          font-size: 0.8rem !important;
+          padding: 0.55rem 1.1rem !important;
         }
       }
     }
