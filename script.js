@@ -1124,6 +1124,10 @@ if (isTouchDevice) {
       const isOpen = preview.classList.contains("is-open");
 
       if (clickedBtn && isOpen) {
+        const url = clickedBtn.getAttribute("href");
+        if (url) {
+          window.open(url, "_blank");
+        }
         return;
       }
 
