@@ -2027,7 +2027,7 @@ main {
 
 .rec-project {
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 500;
   color: #f5f7fa;
   margin: 0 0 0.5rem 0;
 }
@@ -2052,6 +2052,8 @@ main {
   color: rgba(245, 247, 250, 0.8);
   font-style: italic;
   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .rec-quote::before {
   content: "";
