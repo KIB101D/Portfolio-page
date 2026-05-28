@@ -126,6 +126,10 @@ window.translations = {
     accessibility: {
       scrollTop: "Прокрутити нагору",
     },
+
+    notification: {
+      emailCopied: "Email скопійовано у буфер обміну!",
+    },
   },
 
   en: {
@@ -238,6 +242,10 @@ window.translations = {
 
     accessibility: {
       scrollTop: "Scroll to top",
+    },
+
+    notification: {
+      emailCopied: "Email copied to clipboard!",
     },
   },
 
@@ -367,6 +375,10 @@ window.translations = {
 
     accessibility: {
       scrollTop: "Przewiń do góry",
+    },
+
+    notification: {
+      emailCopied: "Email skopiowany do schowka!",
     },
   },
 };

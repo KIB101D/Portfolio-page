@@ -299,6 +299,12 @@ function updateHtmlContent(lang) {
   if (scrollToTop && t.accessibility?.scrollTop) {
     scrollToTop.setAttribute("aria-label", t.accessibility.scrollTop);
   }
+
+  // Оновлення mail notifications
+  const emailLink = document.getElementById("email-link");
+  if (emailLink && t.notification?.emailCopied) {
+    emailLink.setAttribute("data-toast-text", t.notification.emailCopied);
+  }
 }
 
 // Ініціалізація мови при завантаженні
@@ -982,7 +988,6 @@ function renderPdfPreview(lang = "ua") {
 }
 
 // Функція для відкриття повного PDF
-// Функція для відкриття правильного PDF
 function openFullPdf(lang = "ua", pdfId = "student") {
   let pdfUrl = "";
 
@@ -1033,61 +1038,104 @@ document.addEventListener("click", function (e) {
 function copyEmailToClipboard() {
   const email = "boiko.klymentii.ua@gmail.com";
 
-  navigator.clipboard
-    .writeText(email)
-    .then(() => {
-      showNotification("Email скопійовано в буфер обміну!");
-    })
-    .catch((err) => {
-      const textArea = document.createElement("textarea");
-      textArea.value = email;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      showNotification("Email скопійовано в буфер обміну!");
-    });
+  return navigator.clipboard.writeText(email).catch((err) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = email;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  });
 }
 
+// Функція для створення та показу тост-повідомлення
 // Функція для показу повідомлення
 function showNotification(message) {
+  // 1. Перевіряємо, чи додані ключові кадри для анімації. Якщо ні — додаємо їх в документ.
+  if (!document.getElementById("toast-animation-styles")) {
+    const styleSheet = document.createElement("style");
+    styleSheet.id = "toast-animation-styles";
+    styleSheet.textContent = `
+      @keyframes toastSlideIn {
+        from {
+          opacity: 0;
+          transform: translate3d(50px, 0, 0) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+      @keyframes toastSlideOut {
+        from {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: translate3d(30px, -10px, 0) scale(0.9);
+        }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+  }
+
   const notification = document.createElement("div");
   notification.className = "copy-notification";
   notification.textContent = message;
   notification.style.cssText = `
         position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 107, 53, 0.9);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 1.4rem;
+        top: 30px;
+        right: 30px;
+        background: rgba(10, 10, 10, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: 4px solid #ff6b35;
+        color: #f5f7fa;
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-size: 1.3rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        box-shadow: 
+          0 20px 40px rgba(0, 0, 0, 0.5),
+          0 0 30px rgba(255, 107, 53, 0.1);
         z-index: 10000;
-        animation: slideIn 0.3s ease-out;
+        opacity: 0; /* Стартуємо з нуля, анімація сама виведе в 1 */
+        transform: translate3d(50px, 0, 0) scale(0.95);
+        animation: toastSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     `;
 
   document.body.appendChild(notification);
 
   setTimeout(() => {
-    notification.style.animation = "slideOut 0.3s ease-in";
+    notification.style.animation =
+      "toastSlideOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards";
     setTimeout(() => {
       document.body.removeChild(notification);
-    }, 300);
+    }, 400);
   }, 3000);
 }
 
-// Ініціалізація email копіювання та футера
+// Обробник кліку для кнопки пошти
 document.addEventListener("DOMContentLoaded", function () {
   const emailLink = document.getElementById("email-link");
+
   if (emailLink) {
-    emailLink.addEventListener("click", function (e) {
+    emailLink.addEventListener("click", async function (e) {
       e.preventDefault();
-      copyEmailToClipboard();
+
+      // Спочатку копіюємо пошту в буфер
+      await copyEmailToClipboard();
+
+      // Беремо вже готовий, перекладений текст з атрибуту, який туди поклала updateHtmlContent
+      const message = this.getAttribute("data-toast-text") || "Email copied!";
+
+      // Показуємо правильну перекладену нотифікацію
+      showNotification(message);
     });
   }
-
-  initFooterAnimation();
 });
 
 // Анімація появи футера
