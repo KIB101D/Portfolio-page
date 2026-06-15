@@ -585,52 +585,87 @@ function initLavaLamp() {
 }
 
 // Управління хедером та кнопкою "Нагору"
+// Управління хедером та кнопкою "Нагору"
 function initScrollEffects() {
   const header = document.querySelector(".header");
   const scrollToTopBtn = document.getElementById("scrollToTop");
+  const hero = document.querySelector(".hero");
+
+  if (!header) return; // Захист, якщо хедера немає на сторінці
+
   let lastScrollY = window.scrollY;
+  let heroHeight = hero ? hero.offsetHeight : 500; // Кешуємо висоту ОДИН раз
+  let ticking = false; // Прапорець для requestAnimationFrame
 
-  function handleScroll() {
-    const currentScrollY = window.scrollY;
-    const heroHeight = document.querySelector(".hero").offsetHeight;
-    const isMenuActive = menu.classList.contains("active");
+  // Оновлюємо висоту Hero лише при ресайзі екрану (а не при скролі)
+  window.addEventListener(
+    "resize",
+    () => {
+      heroHeight = hero ? hero.offsetHeight : 500;
+    },
+    { passive: true },
+  );
 
-    if (isMenuActive) return;
+  // Основна функція, яка робить візуальні зміни (викликається через RAF)
+  function updateDOM() {
+    const currentScrollY = Math.max(0, window.scrollY); // Захист від iOS "гумового" скролу (негативні значення)
+    const isMenuActive = menu && menu.classList.contains("active");
 
-    if (currentScrollY > heroHeight * 0.3) {
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+    if (isMenuActive) {
+      ticking = false;
+      return;
+    }
+
+    // 1. Скрол вниз (Ховаємо)
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (!header.classList.contains("hidden")) {
         header.classList.add("hidden");
         header.classList.remove("visible");
-      } else {
+      }
+    }
+    // 2. Скрол вгору (Показуємо)
+    else if (currentScrollY < lastScrollY) {
+      if (!header.classList.contains("visible") && currentScrollY > 50) {
         header.classList.remove("hidden");
         header.classList.add("visible");
       }
-    } else {
+    }
+
+    // 3. Скидання на самому верху сторінки
+    if (currentScrollY <= 50) {
       header.classList.remove("hidden", "visible");
     }
 
+    // 4. Кнопка "Нагору"
     if (scrollToTopBtn) {
-      scrollToTopBtn.classList.toggle(
-        "visible",
-        currentScrollY > heroHeight * 0.5,
-      );
+      const shouldShowTopBtn = currentScrollY > heroHeight * 0.5;
+      if (scrollToTopBtn.classList.contains("visible") !== shouldShowTopBtn) {
+        scrollToTopBtn.classList.toggle("visible", shouldShowTopBtn);
+      }
     }
 
     lastScrollY = currentScrollY;
+    ticking = false; // Дозволяємо наступний кадр анімації
+  }
+
+  // Обробник скролу, який просто "просить" браузер оновити DOM у наступному вільному кадрі
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateDOM);
+      ticking = true;
+    }
   }
 
   if (scrollToTopBtn) {
     scrollToTopBtn.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
-  window.addEventListener("scroll", handleScroll, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true });
 
-  handleScroll();
+  // Ініціалізація початкового стану
+  updateDOM();
 }
 
 // Анімація секцій при скролі з Intersection Observer
