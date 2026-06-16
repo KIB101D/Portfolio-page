@@ -176,9 +176,16 @@ function updateHtmlContent(lang) {
   if (aboutText && t.about?.text) aboutText.textContent = t.about.text;
 
   const aboutSkillsContainer = document.querySelector(".about-skills");
+
   if (aboutSkillsContainer && t.about?.skills) {
     aboutSkillsContainer.innerHTML = "";
-    t.about.skills.forEach((skill) => {
+
+    const skills =
+      window.innerWidth <= 320 && t.about.skillsMobile
+        ? t.about.skillsMobile
+        : t.about.skills;
+
+    skills.forEach((skill) => {
       const span = document.createElement("span");
       span.className = "skill-tag";
       span.textContent = skill;

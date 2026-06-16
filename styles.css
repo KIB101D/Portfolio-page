@@ -1144,9 +1144,7 @@ main {
 @media (max-width: 767px) {
   .about-skills {
     justify-content: center;
-  }
-  .about-skills .skill-tag:last-child {
-    display: none;
+    padding-top: 15px;
   }
 }
 

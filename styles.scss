@@ -1347,9 +1347,7 @@ main {
 
   @include respond(mobile) {
     justify-content: center;
-    .skill-tag:last-child {
-      display: none;
-    }
+    padding-top: 15px;
   }
 }
 

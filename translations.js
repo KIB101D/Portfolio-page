@@ -22,11 +22,20 @@ window.translations = {
       text: "Frontend developer, який створює продумані інтерфейси з фокусом на UX, плавні взаємодії та сучасну frontend-архітектуру. Працюю з React, TypeScript, SCSS і Tailwind, створюю адаптивні вебпродукти та інтегрую API.",
       skills: [
         "React",
+        "SCSS",
+        "TypeScript",
+        "Tailwind CSS",
+        "Responsive Design",
+        "UX Thinking",
+      ],
+
+      skillsMobile: [
+        "React",
+        "Responsive Design",
         "TypeScript",
         "Tailwind CSS",
         "SCSS",
         "UX Thinking",
-        "Responsive Design",
       ],
     },
 
@@ -155,11 +164,20 @@ window.translations = {
       text: "Frontend developer focused on polished interfaces, scalable frontend architecture and thoughtful UX. I work with React, TypeScript, SCSS and Tailwind, build responsive products and integrate APIs into smooth user experiences.",
       skills: [
         "React",
+        "SCSS",
+        "TypeScript",
+        "Tailwind CSS",
+        "Responsive Design",
+        "UX Thinking",
+      ],
+
+      skillsMobile: [
+        "React",
+        "Responsive Design",
         "TypeScript",
         "Tailwind CSS",
         "SCSS",
         "UX Thinking",
-        "Responsive Design",
       ],
     },
 
@@ -272,11 +290,20 @@ window.translations = {
       text: "Frontend developer skupiony na dopracowanych interfejsach, skalowalnej architekturze frontendowej i przemyślanym UX. Pracuję z React, TypeScript, SCSS i Tailwind, tworzę responsywne produkty webowe oraz integruję API.",
       skills: [
         "React",
+        "SCSS",
+        "TypeScript",
+        "Tailwind CSS",
+        "Responsive Design",
+        "UX Thinking",
+      ],
+
+      skillsMobile: [
+        "React",
+        "Responsive Design",
         "TypeScript",
         "Tailwind CSS",
         "SCSS",
         "UX Thinking",
-        "Responsive Design",
       ],
     },
 
