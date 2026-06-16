@@ -1120,6 +1120,7 @@ main {
 }
 
 .about-skills {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
@@ -1127,6 +1128,9 @@ main {
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.8s;
   justify-content: center;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
 }
 .about-section.visible .about-skills {
   opacity: 1;
@@ -1147,19 +1151,23 @@ main {
 }
 
 .skill-tag {
+  position: relative;
   padding: 0.8rem 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(245, 247, 250, 0.12);
   border-radius: 999px;
   color: #f5f7fa;
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: grab;
+  will-change: transform, box-shadow;
   opacity: 0;
   transform: translateY(10px) scale(0.96);
-  transition: opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1), transform 0.45s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.45s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.45s cubic-bezier(0.19, 1, 0.22, 1), color 0.45s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 0.45s cubic-bezier(0.19, 1, 0.22, 1), transform 0.45s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.45s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.45s cubic-bezier(0.19, 1, 0.22, 1), color 0.45s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.45s cubic-bezier(0.19, 1, 0.22, 1), backdrop-filter 0.45s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .about-section.visible .skill-tag {
   opacity: 1;
@@ -1195,11 +1203,26 @@ main {
 .skill-tag:nth-child(10) {
   transition-delay: 1.55s;
 }
-.skill-tag:hover {
-  background: rgba(255, 255, 255, 0.08);
+.skill-tag:hover:not(.is-dragging) {
+  background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.45);
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+.skill-tag:active {
+  cursor: grabbing;
+}
+.skill-tag.is-dragging {
+  transition: none !important;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.3);
+}
+.skill-tag.is-pushing {
+  transition: transform 0.14s ease-out !important;
 }
 @media (max-width: 767px) {
   .skill-tag {

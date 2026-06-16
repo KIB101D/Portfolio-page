@@ -184,6 +184,8 @@ function updateHtmlContent(lang) {
       span.textContent = skill;
       aboutSkillsContainer.appendChild(span);
     });
+
+    initElasticSkillsDrag();
   }
 
   // ==========================================
@@ -1236,5 +1238,272 @@ if (isTouchDevice) {
         p.classList.remove("is-open");
       });
     }
+  });
+}
+
+function initElasticSkillsDrag() {
+  const container = document.querySelector(".about-skills");
+  if (!container) return;
+
+  const tags = Array.from(container.querySelectorAll(".skill-tag"));
+
+  const PUSH_RADIUS = 70;
+  const MAX_PUSH = 20;
+  const INSERT_PUSH = 28;
+
+  let baseRects = [];
+  let insertIndex = -1;
+
+  const getXY = (e) => {
+    return e.type.includes("touch")
+      ? {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        }
+      : {
+          x: e.clientX,
+          y: e.clientY,
+        };
+  };
+
+  const snapshot = (draggedTag) => {
+    baseRects = tags
+      .filter((t) => t !== draggedTag)
+      .map((t) => ({
+        tag: t,
+        rect: t.getBoundingClientRect(),
+      }));
+  };
+
+  const findInsertIndex = (dragRect) => {
+    const dragCX = dragRect.left + dragRect.width / 2;
+
+    const dragCY = dragRect.top + dragRect.height / 2;
+
+    if (!baseRects.length) return 0;
+
+    const ROW_GAP = 20;
+    const rows = [];
+
+    let row = [];
+    let rowY = null;
+
+    baseRects.forEach((item, i) => {
+      const midY = item.rect.top + item.rect.height / 2;
+
+      if (rowY === null || Math.abs(midY - rowY) < ROW_GAP) {
+        row.push({ ...item, i });
+
+        rowY =
+          rowY === null ? midY : (rowY * (row.length - 1) + midY) / row.length;
+      } else {
+        rows.push(row);
+
+        row = [{ ...item, i }];
+        rowY = midY;
+      }
+    });
+
+    if (row.length) rows.push(row);
+
+    let bestRow = rows[0];
+    let bestDY = Infinity;
+
+    rows.forEach((r) => {
+      const ry =
+        r.reduce((sum, item) => sum + item.rect.top + item.rect.height / 2, 0) /
+        r.length;
+
+      const d = Math.abs(dragCY - ry);
+
+      if (d < bestDY) {
+        bestDY = d;
+        bestRow = r;
+      }
+    });
+
+    for (let k = 0; k < bestRow.length; k++) {
+      const midX = bestRow[k].rect.left + bestRow[k].rect.width / 2;
+
+      if (dragCX < midX) {
+        return bestRow[k].i;
+      }
+    }
+
+    return bestRow[bestRow.length - 1].i + 1;
+  };
+
+  tags.forEach((tag) => {
+    let startX = 0;
+    let startY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+
+    let isDragging = false;
+
+    const onStart = (e) => {
+      if (e.type === "mousedown") {
+        e.preventDefault();
+      }
+
+      isDragging = true;
+
+      tag.classList.add("is-dragging");
+
+      const { x, y } = getXY(e);
+
+      startX = x;
+      startY = y;
+
+      currentX = 0;
+      currentY = 0;
+
+      tag.style.transition = "none";
+
+      snapshot(tag);
+
+      document.addEventListener("mousemove", onMove, { passive: false });
+
+      document.addEventListener("touchmove", onMove, { passive: false });
+
+      document.addEventListener("mouseup", onEnd);
+
+      document.addEventListener("touchend", onEnd);
+    };
+
+    const onMove = (e) => {
+      if (!isDragging) return;
+
+      e.preventDefault();
+
+      const { x, y } = getXY(e);
+
+      currentX = x - startX;
+      currentY = y - startY;
+
+      tag.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.05)`;
+
+      const dragRect = tag.getBoundingClientRect();
+
+      insertIndex = findInsertIndex(dragRect);
+
+      const dragCX = dragRect.left + dragRect.width / 2;
+
+      const dragCY = dragRect.top + dragRect.height / 2;
+
+      baseRects.forEach(({ tag: otherTag, rect }, i) => {
+        const tcx = rect.left + rect.width / 2;
+
+        const tcy = rect.top + rect.height / 2;
+
+        const edgeX = Math.max(
+          0,
+          Math.abs(dragCX - tcx) - dragRect.width / 2 - rect.width / 2,
+        );
+
+        const edgeY = Math.max(
+          0,
+          Math.abs(dragCY - tcy) - dragRect.height / 2 - rect.height / 2,
+        );
+
+        const edgeDist = Math.sqrt(edgeX * edgeX + edgeY * edgeY);
+
+        let collisionX = 0;
+        let collisionY = 0;
+
+        if (edgeDist < PUSH_RADIUS) {
+          const strength = Math.pow(1 - edgeDist / PUSH_RADIUS, 2);
+
+          const dx = tcx - dragCX;
+          const dy = tcy - dragCY;
+
+          const len = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          collisionX = (dx / len) * MAX_PUSH * strength;
+
+          collisionY = (dy / len) * MAX_PUSH * strength;
+        }
+
+        const isAfter = i >= insertIndex;
+
+        const distToInsert = Math.abs(i - insertIndex + (isAfter ? -0.5 : 0.5));
+
+        const insertStrength = Math.max(0, 1 - distToInsert / 2.2);
+
+        const insertX = (isAfter ? INSERT_PUSH : -INSERT_PUSH) * insertStrength;
+
+        otherTag.style.transition = "transform 0.14s ease-out";
+
+        otherTag.style.transform = `translate3d(${collisionX + insertX}px, ${collisionY}px, 0)`;
+      });
+    };
+
+    const onEnd = () => {
+      if (!isDragging) return;
+
+      isDragging = false;
+
+      tag.classList.remove("is-dragging");
+
+      baseRects.forEach(({ tag: otherTag }) => {
+        otherTag.style.transition =
+          "transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94)";
+
+        otherTag.style.transform = "translate3d(0,0,0)";
+
+        setTimeout(() => {
+          otherTag.style.transition = "";
+
+          otherTag.style.transform = "";
+        }, 400);
+      });
+
+      const rectBefore = tag.getBoundingClientRect();
+
+      const siblings = baseRects.map((item) => item.tag);
+
+      if (insertIndex >= siblings.length) {
+        container.appendChild(tag);
+      } else {
+        container.insertBefore(tag, siblings[insertIndex]);
+      }
+
+      tag.style.transform = "none";
+
+      const rectAfter = tag.getBoundingClientRect();
+
+      const diffX = rectBefore.left - rectAfter.left;
+
+      const diffY = rectBefore.top - rectAfter.top;
+
+      tag.style.transition = "none";
+
+      tag.style.transform = `translate3d(${diffX}px, ${diffY}px, 0) scale(1.05)`;
+
+      void tag.offsetWidth;
+
+      tag.style.transition =
+        "transform 0.5s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease";
+
+      tag.style.transform = "translate3d(0,0,0) scale(1)";
+
+      setTimeout(() => {
+        tag.style.transition = "";
+        tag.style.transform = "";
+      }, 500);
+
+      document.removeEventListener("mousemove", onMove);
+
+      document.removeEventListener("touchmove", onMove);
+
+      document.removeEventListener("mouseup", onEnd);
+
+      document.removeEventListener("touchend", onEnd);
+    };
+
+    tag.addEventListener("mousedown", onStart);
+
+    tag.addEventListener("touchstart", onStart, { passive: false });
   });
 }
