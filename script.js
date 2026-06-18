@@ -134,20 +134,31 @@ function updateHtmlContent(lang) {
     menuContacts.textContent = t.nav.contacts;
   }
 
-  // Підтримка твоєї поточної HTML-структури
+  // Підтримка поточної HTML-структури на всіх сторінках
   const menuLinks = document.querySelectorAll(".menu-link");
   if (menuLinks.length) {
     menuLinks.forEach((link) => {
-      const href = link.getAttribute("href");
+      const href = link.getAttribute("href") || "";
 
-      if (href === "./index.html" || href === "index.html") {
-        link.textContent = t.nav?.about || link.textContent;
-      } else if (href === "#portfolio") {
+      // 1. Якщо посилання веде на проекти (через якір або через окремий html файл)
+      if (href.includes("#portfolio") || href.includes("pet-projects.html")) {
         link.textContent = t.nav?.projects || link.textContent;
-      } else if (href === "#recommendation") {
+      }
+      // 2. Якщо посилання веде на рекомендації
+      else if (href.includes("#recommendation")) {
         link.textContent = t.nav?.recommendations || link.textContent;
-      } else if (href === "#contacts") {
+      }
+      // 3. Якщо посилання веде на контакти
+      else if (href.includes("#contacts")) {
         link.textContent = t.nav?.contacts || link.textContent;
+      }
+      // 4. Якщо посилання веде на головну сторінку "Про мене"
+      else if (
+        href === "./index.html" ||
+        href === "index.html" ||
+        href.includes("index.html")
+      ) {
+        link.textContent = t.nav?.about || link.textContent;
       }
     });
   }
